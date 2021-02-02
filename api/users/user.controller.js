@@ -5,24 +5,28 @@ const { sign } = require('jsonwebtoken');
 
 module.exports = {
   login: (req, res) => {
-    const body = req.body;
+    createUser(req.body)
+      .then((results) => {
+        if (!results) {
+          res.status(500);
 
-    createUser(body, (err, results) => {
-      if (err) {
-        console.log(err);
-      }
-      if (!results) {
+          return res.json({
+            success: 0,
+            message: 'Invalid email or password',
+          });
+        }
+        res.status(200);
+        const jsonToken = sign({ body: results }, process.env.JWT_KEY);
         return res.json({
-          success: 0,
-          data: 'Invalid email and password',
+          success: 1,
+          message: 'Login Successfully',
+          token: jsonToken,
         });
-      }
-      const jsonToken = sign({ body: results }, process.env.JWT_KEY);
-      return res.json({
-        success: 1,
-        message: 'Login Successfully',
-        token: jsonToken,
+      })
+      .catch((e) => {
+        res.status(e.status);
+        res.send(e);
+        res.end();
       });
-    });
   },
 };
