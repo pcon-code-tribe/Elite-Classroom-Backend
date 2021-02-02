@@ -10,10 +10,10 @@ module.exports = {
       async (err, result, field) => {
         if (result.length === 0) {
           let sqlInsert =
-            'INSERT INTO users (name, email, google_token) VALUES (?,?,?)';
+            'INSERT INTO users (name, email, registration_no, google_token) VALUES (?,?,?,?)';
           await pool.query(
             sqlInsert,
-            [data.name, data.email, data.google_token],
+            [data.name, data.email, data.registration_no, data.google_token],
             (error, results, fields) => {
               if (error) {
                 return callback(error);
