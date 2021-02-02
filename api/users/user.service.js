@@ -1,38 +1,31 @@
-const pool =  require("../../config/database");
+const pool = require('../../config/database');
 
+module.exports = {
+  createUser: async (data, callback) => {
+    let sqlSearch = 'SELECT * FROM users WHERE google_token = ?'; //  checking if the user already exists
 
-  module.exports = {
-
-    createUser : (data , callback) => {
-
-      pool.query("Select * FROM users WHERE google_token = '"+ data.google_token +"'",
-       (err, result, field) => {
-        if(result.length === 0){
-
-          pool.query("INSERT INTO users (name, email, google_token) VALUES (?,?,?)",
-          [
-             data.name,
-             data.email,
-             data.google_token
-          ]
-          ,
-          (error,results,fields) => {
-              if(error){
-                  return callback(error);
+    await pool.query(
+      sqlSearch,
+      [data.google_token],
+      async (err, result, field) => {
+        if (result.length === 0) {
+          let sqlInsert =
+            'INSERT INTO users (name, email, google_token) VALUES (?,?,?)';
+          await pool.query(
+            sqlInsert,
+            [data.name, data.email, data.google_token],
+            (error, results, fields) => {
+              if (error) {
+                return callback(error);
               }
-  
-              return callback(null,results);
-          }
-          
-          );
-  
-          
-       }else{  
-              return callback(null,result);
-          }
-       
-    }
-      )
-  }
 
+              return callback(null, results);
+            }
+          );
+        } else {
+          return callback(null, result);
+        }
+      }
+    );
+  },
 };
