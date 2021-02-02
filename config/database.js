@@ -10,5 +10,17 @@ const pool = createPool({
     
 });
 
+pool.getConnection((err, connection) =>{
+
+    if(err){
+        throw err;
+    }else{
+        console.log("MySQL connected...");
+    }
+
+    connection.release();
+    return;
+})
+
 
 module.exports = pool;
