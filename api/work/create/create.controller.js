@@ -1,4 +1,5 @@
-const {submitWork,uploadWork}= require("./create.services");
+const {submitWork}= require("./create.services");
+const {uploadWork}= require('../work.services');
 
 module.exports = {
     submit: async (req, res) =>{
@@ -6,7 +7,13 @@ module.exports = {
         if(!(data.user_id || data.work_id || data.work || data.attachment || data.submitted_on)){
             res.status(400).send("data missing");
         }else{
-            res.send("all good");
+            submitWork(data,(err,info)=>{
+                if(err){
+                    res.status(500).json(err);
+                }else{
+                    res.status(200).json(info);
+                }
+            });
         }
     },
     upload: async (req, res)=>{
