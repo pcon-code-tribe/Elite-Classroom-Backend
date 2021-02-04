@@ -20,7 +20,7 @@ module.exports = {
             Body:data.buffer,
         }
 
-        console.log(params);
+        // console.log(params);
         //uploading the file to s3 bucket
         s3.upload(params,(err, data)=>{
             if(err){

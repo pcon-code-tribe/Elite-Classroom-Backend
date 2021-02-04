@@ -32,7 +32,7 @@ and on successfull submission respondes with a json :
     "changedRows": 0
 }
 
-##  /api/work/read/submission/:sid
+###  /api/work/read/submission/:sid
 responce:{
     "submission_id": 2,
     "user_id": 1,
@@ -42,6 +42,8 @@ responce:{
     "submitted_on": "2000-09-12T04:40:00.000Z"
 }
 
-## /api/work/read/work/:workid
+### /api/work/read/work/:workid
 
-## /api/work/read/work/:workid/:uid
+### /api/work/read/work/:workid/:uid
+
+### /api/work/update/:uid/:wid/:sid
