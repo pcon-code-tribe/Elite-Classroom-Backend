@@ -1,5 +1,5 @@
 const {read_from_db} = require('./services');
-const {checkWork} = require("../work.services");
+const {checkUser,checkWork} = require("../work.services");
 
 module.exports = {
     submission : async (req, res) =>{
@@ -38,6 +38,43 @@ module.exports = {
                             res.json(info);
                         }
                     })
+                }
+            }
+        });
+    },
+    user: async (req, res)=>{
+        const sql = "SELECT * FROM work_submission WHERE work_id = ? AND user_id = ?";
+        const param =[req.params.workid, req.params.uid];
+        checkUser(req.params.uid,(err,info)=>{
+            if(err){
+                console.log(err);
+                res.status(500).send(err);
+            }else{
+                if(info.length == 0){
+                    res.status(400).send("no such error");
+                }else{
+                    //user exists
+                    //lets check for work
+                    checkWork(req.params.workid,(err,info)=>{
+                        if(err){
+                            console.log(err);
+                            res.status(500).send(err);
+                        }else{
+                            if(info.length == 0){
+                                res.status(400).send("no such work");
+                            }else{
+                                //work exixts
+                                read_from_db(sql, param,(err,info)=>{
+                                    if(err){
+                                        console.log(err);
+                                        res.status(500).send(err);
+                                    }else{
+                                        res.json(info);
+                                    }
+                                });
+                            }
+                        }
+                    });
                 }
             }
         });

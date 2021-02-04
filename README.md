@@ -44,6 +44,4 @@ responce:{
 
 ## /api/work/read/work/:workid
 
-## /api/work/read/user/:uid
-
 ## /api/work/read/work/:workid/:uid
