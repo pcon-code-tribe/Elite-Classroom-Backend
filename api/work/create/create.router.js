@@ -21,7 +21,8 @@ router.post('/submit', submit);
 router.post('/upload',uploads,upload);
 
 router.get('/check',(req,res)=>{
-    var sql ="SELECT * FROM work_submission";
+    // var sql ="SELECT * FROM work_submission";
+    var sql = "INSERT INTO class_works (class_code,title,description,type,attachment,created_date,due_date) VALUES ('1','assignment','dbms assignment',1,'aaaaaaaaaaaaaaaaa','2020-09-12','2020-10-12')";
     pool.query(sql,(err,result,field)=>{
         if(err){
             res.json(err);

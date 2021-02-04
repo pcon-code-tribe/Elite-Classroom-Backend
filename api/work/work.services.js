@@ -1,3 +1,4 @@
+const pool = require("../../config/database");
 const AWS = require('aws-sdk');
 const {uuid} = require('uuidv4');
 
@@ -29,5 +30,29 @@ module.exports = {
                 return callback(null,data);
             }
         })
+    },
+    checkUser:(uid,callback)=>{
+        
+        var sql = "SELECT * FROM users WHERE user_id = ?";
+        pool.query(sql,[uid],(err,result,fields)=>{
+            if(err){
+                return callback(err);
+            }else{
+                return callback(null,result);
+            }
+        })
+    },
+    checkWork:(work_id,callback)=>{
+
+        var sql = "SELECT * FROM class_works WHERE work_id = ?";
+
+        pool.query(sql,[work_id],(err,result,fields)=>{
+            if(err){
+                return callback(err);
+            }else{
+                return callback(null,result);
+            }
+        })
+
     }
 }

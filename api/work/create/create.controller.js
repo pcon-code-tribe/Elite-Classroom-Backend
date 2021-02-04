@@ -1,5 +1,5 @@
 const {submitWork}= require("./create.services");
-const {uploadWork}= require('../work.services');
+const {uploadWork,checkUser,checkWork}= require('../work.services');
 
 module.exports = {
     submit: async (req, res) =>{
@@ -7,13 +7,35 @@ module.exports = {
         if(!(data.user_id || data.work_id || data.work || data.attachment || data.submitted_on)){
             res.status(400).send("data missing");
         }else{
-            submitWork(data,(err,info)=>{
+            checkUser(data.user_id,(err,info)=>{
                 if(err){
+                    console.log(err);
                     res.status(500).json(err);
                 }else{
-                    res.status(200).json(info);
+                    if(info.length == 0){
+                        res.status(401).send("user not found");
+                    }else{
+                        checkWork(data.work_id,(err,info)=>{
+                            if(err){
+                                console.log(err);
+                                res.status(500).json(err);
+                            }else{
+                                if(info.length == 0){
+                                    res.status(404).send("work not found");
+                                }else{
+                                    submitWork(data,(err,info)=>{
+                                        if(err){
+                                            res.status(500).json(err);
+                                        }else{
+                                            res.status(200).json(info);
+                                        }
+                                    });
+                                }
+                            }
+                        })
+                    }
                 }
-            });
+            })
         }
     },
     upload: async (req, res)=>{
