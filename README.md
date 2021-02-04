@@ -33,6 +33,14 @@ and on successfull submission respondes with a json :
 }
 
 ##  /api/work/read/submission/:sid
+responce:{
+    "submission_id": 2,
+    "user_id": 1,
+    "work_id": 1,
+    "work": "submit this task",
+    "attachment": "https://elite-classroom-backend.s3.amazonaws.com/d9e7fad8-3969-4594-b698-909da47a862c.JPG",
+    "submitted_on": "2000-09-12T04:40:00.000Z"
+}
 
 ## /api/work/read/work/:workid
 
