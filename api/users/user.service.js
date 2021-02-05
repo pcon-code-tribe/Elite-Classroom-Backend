@@ -1,38 +1,50 @@
-const pool =  require("../../config/database");
+const pool = require('../../config/database');
 
+module.exports = {
+  createUser: ({ name, email, registration_no, google_token }) => {
+    return new Promise(async (resolve, reject) => {
+      let sqlSearch = 'SELECT * FROM users WHERE google_token = ?'; //  checking if the user already exists
 
-  module.exports = {
+      await pool.query(
+        sqlSearch,
+        [google_token],
+        async (err, result, field) => {
+          if (!google_token) {
+            return reject({
+              status: 422,
+              error: 'Token can not be undefined',
+            });
+          }
 
-    createUser : (data , callback) => {
+          if (err) {
+            return reject({
+              status: 500,
+              error: err,
+            });
+          }
 
-      pool.query("Select * FROM users WHERE google_token = '"+ data.google_token +"'",
-       (err, result, field) => {
-        if(result.length === 0){
+          if (result.length === 0) {
+            let sqlInsert =
+              'INSERT INTO users (name, email, registration_no, google_token) VALUES (?,?,?,?)';
+            await pool.query(
+              sqlInsert,
+              [name, email, registration_no, google_token],
+              (error, results, fields) => {
+                if (error) {
+                  return reject({
+                    status: 500,
+                    error: 'Insertion to database failed',
+                  });
+                }
 
-          pool.query("INSERT INTO users (name, email, google_token) VALUES (?,?,?)",
-          [
-             data.name,
-             data.email,
-             data.google_token
-          ]
-          ,
-          (error,results,fields) => {
-              if(error){
-                  return callback(error);
+                return resolve(results);
               }
-  
-              return callback(null,results);
+            );
+          } else {
+            return resolve(result);
           }
-          
-          );
-  
-          
-       }else{  
-              return callback(null,result);
-          }
-       
-    }
-      )
-  }
-
+        }
+      );
+    });
+  },
 };
