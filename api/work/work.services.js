@@ -31,6 +31,23 @@ module.exports = {
             }
         })
     },
+    deleteWork:(url,callback)=>{
+        const myUrl = url.split('/');
+        const s3obj = myUrl[myUrl.length - 1];
+
+        const params = {
+            Bucket:process.env.AWS_BUCKET_NAME,
+            Key:s3obj,
+        };
+        s3.deleteObject(params,(err, data)=>{
+            if(err){
+                callback(err);
+            }else{
+                console.log(`deleted object ${s3obj} from bucket ${process.env.AWS_BUCKET_NAME}`);
+                callback(null,data);
+            }
+        });
+    },
     checkUser:(uid,callback)=>{
         
         var sql = "SELECT * FROM users WHERE user_id = ?";
