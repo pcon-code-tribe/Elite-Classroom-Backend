@@ -7,4 +7,5 @@ router.use('/todo', require('./todos/todo.router'));
 
 router.use('/getClasses', require('./getClasses/getClasses.router'));
 
+router.use('/notes',require('./notes/notes.router'));
 module.exports = router;
