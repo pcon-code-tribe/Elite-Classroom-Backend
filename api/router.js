@@ -1,3 +1,4 @@
+const { Route53Resolver } = require('aws-sdk');
 const express = require('express');
 const router = express.Router();
 
@@ -6,5 +7,5 @@ router.use('/classrooms', require('./classrooms/classroom.router'));
 router.use('/todo', require('./todos/todo.router'));
 
 router.use('/getClasses', require('./getClasses/getClasses.router'));
-
+router.use('/work',require('./work/work.router'));
 module.exports = router;
