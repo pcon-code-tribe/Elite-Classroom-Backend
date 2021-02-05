@@ -1,16 +1,12 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const router = require("./api/users/user.router");
-const work = require("./api/work/work.router")
 const routes = require('./api/router');
 app.use(express.json());
 app.use('/api', routes);
 
 
 
-app.use("/api/users",router);
-app.use("/api/work",work);
 
 
 
