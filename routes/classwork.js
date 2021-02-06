@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 var db = require('../config/database');
-const { nanoid } = require('nanoid');
+
 
 //shows everytning the teacher has posted for a particular classcode
 
@@ -24,8 +24,8 @@ router.post('/classwork', (req, res) => {
 router.post('/add-classwork', (req, res) => {
 
     let { class_Code, title, desc, type, attachment, created_date, due_date } = req.body;
-    let sql = 'insert into class_works set class_Code=?,title=?,description=?,type=?,attachment=?,created_date=?,due_date=?';
-    let query = db.query(sql, [class_Code, title, desc, type, attachment, created_date, due_date], (err, result) => {
+    let sql = 'insert into class_works set class_Code=?,title=?,description=?,type=?,attachment=?,due_date=?';
+    let query = db.query(sql, [class_Code, title, desc, type, attachment, due_date], (err, result) => {
 
         if (err) {
             throw err;
@@ -56,13 +56,13 @@ router.delete('/delete-classwork', (req, res) => {
 //updating classwork 
 
 router.put("/update-classwork", async(req, res) => {
-    let { work_id, title } = req.body;
-    if (work_id && title) {
+    let { work_id, title, description, type, attachment } = req.body;
+    if (work_id && title && description && type && attachment) {
         let check_sql = "SELECT * FROM class_works WHERE work_id=?";
         let [check_result] = await db.query(check_sql, [work_id]);
         if (check_result) {
-            let sql = "UPDATE class_works set title=? WHERE work_id=?";
-            let result = await db.query(sql, [title, work_id]);
+            let sql = "UPDATE class_works set title=?, description =?, type=?, attachment=?  WHERE work_id=?";
+            let result = await db.query(sql, [title, description, type, attchment, work_id]);
             res.status(200).json({
                 message: "work Edited",
             });
