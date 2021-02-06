@@ -1,8 +1,10 @@
+const { nanoid } = require('nanoid');
 const pool = require('../../config/database');
 
 module.exports = {
-  createClassroom: ({ classCode, className, profID }) => {
+  createClassroom: ({ className, profID }) => {
     return new Promise(async (resolve, reject) => {
+      let classCode = nanoid(20);
       let sql =
         'INSERT INTO classroom(class_code, class_name, prof_id) VALUES (?,?,?)';
 

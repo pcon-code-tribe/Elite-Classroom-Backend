@@ -13,7 +13,11 @@ module.exports = {
         }
 
         res.status(200);
-        return res.send(result);
+        return res.json({
+          success: 1,
+          message: 'Fetched classes',
+          data: result,
+        });
       })
 
       .catch((e) => {
