@@ -11,8 +11,7 @@ module.exports = {
                         message: 'Error occurred while getting the notes',
                     });
                 }
-                else
-                {
+                else {
                     res.status(200);
                     return res.json(result);
                 }
@@ -21,7 +20,7 @@ module.exports = {
                 res.status(e.status);
                 res.send(e);
                 res.end();
-              });
+            });
     },
 
     update: (req, res) => {
@@ -32,10 +31,9 @@ module.exports = {
                     return res.json({
                         success: 0,
                         message: 'Error occurred while updating notes',
-                      });
+                    });
                 }
-                else
-                {
+                else {
                     res.status(200);
                     return res.json(result);
                 }
@@ -44,7 +42,7 @@ module.exports = {
                 res.status(e.status);
                 res.send(e);
                 res.end();
-              });
+            });
     },
 
     del: (req, res) => {
@@ -57,8 +55,7 @@ module.exports = {
                         message: 'Error occurred while deleting the notes',
                     });
                 }
-                else
-                {
+                else {
                     res.status(200);
                     return res.json(result);
                 }
@@ -67,11 +64,11 @@ module.exports = {
                 res.status(e.status);
                 res.send(e);
                 res.end();
-              });
+            });
     },
 
     create: (req, res) => {
-        createNotes(req.body)
+        createNotes(req.body, req.params)
             .then((result) => {
                 if (!result) {
                     res.status(500);
@@ -80,8 +77,7 @@ module.exports = {
                         message: 'Error occurred while creating the notes',
                     });
                 }
-                else
-                {
+                else {
                     res.status(200);
                     return res.json(result);
                 }
@@ -90,7 +86,7 @@ module.exports = {
                 res.status(e.status);
                 res.send(e);
                 res.end();
-              });
+            });
     },
 
 };
