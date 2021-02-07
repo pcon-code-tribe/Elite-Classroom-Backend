@@ -1,26 +1,14 @@
 const pool = require('../../config/database');
 
 
-let weekday = new Array(7);
-weekday[0] = "sun";
-weekday[1] = "mon";
-weekday[2] = "tue";
-weekday[3] = "wed";
-weekday[4] = "thu";
-weekday[5] = "fri";
-weekday[6] = "sat";
-
 module.exports={
 
-    addClass: ({classCode, date, time}) => {
+    addClass_everyWeek: ({classCode, day, time}) => {
 
         return new Promise (async (resolve, reject) =>{
-
-            let classDay = new Date(date).getDay();
-            let n = weekday[classDay];
-
-            let sqlSearch = `SELECT ${n} FROM current_schedule WHERE class_code=?`;
-            await pool.query(sqlSearch, [classCode], async(err, result, field) =>{
+            
+            let sqlSearch = `SELECT ${day} FROM main_schedule WHERE class_code= ${classCode}`;
+            await pool.query(sqlSearch, async(err, result, field) =>{
             
                 if(err){
                     return reject({
@@ -31,7 +19,7 @@ module.exports={
 
                 if(result.length === 0){
            
-                    let sqlInsert = `INSERT INTO current_schedule SET class_code=?, ${n} =? `;
+                    let sqlInsert = `INSERT INTO main_schedule SET class_code=?, ${day} =? `;
 
                     await pool.query(sqlInsert, [classCode, time], (err, result, field) =>{
 
@@ -41,20 +29,34 @@ module.exports={
                                 error: err
                             });
                         }
-
+                        //console.log(result);
                         return resolve(result);
                     });
                 }
-                return resolve(result);
+                else{
+                    let sqlUpdate = `UPDATE main_schedule SET ${day} =? WHERE class_code=? `;
+
+                    await pool.query(sqlUpdate, [time, classCode], (err, result, field) =>{
+
+                        if(err){
+                            return reject({
+                                status: 500,
+                                error: err
+                            });
+                        }
+                        //console.log(result);
+                        return resolve(result);
+                    });
+                }
             });
         });
     },
 
-    getSchedule: ({classCode}) => {
+    getSchedule_everyWeek: ({classCode}) => {
 
         return new Promise (async (resolve, reject) =>{
 
-            let sql = 'SELECT * FROM current_schedule WHERE class_code=?';
+            let sql = 'SELECT * FROM main_schedule WHERE class_code=?';
 
             await pool.query(sql, [classCode], (err, result, field) =>{
 
@@ -70,14 +72,11 @@ module.exports={
         });
     },
 
-    deleteClass: ({classCode, date, time}) =>{
+    deleteClass_everyWeek: ({classCode, day, time}) =>{
         
         return new Promise (async (resolve, reject) =>{
 
-            let classDay = new Date(date).getDay();
-            let n = weekday[classDay];
-
-            let sqlSearch = `SELECT ${n} FROM current_schedule WHERE class_code=?`;
+            let sqlSearch = `SELECT ${day} FROM main_schedule WHERE class_code=?`;
             await pool.query(sqlSearch, [classCode], async(err, result, field) =>{
             
                 if(err){
@@ -89,8 +88,8 @@ module.exports={
 
             if(result){
 
-                let sqlDelete = `DELETE FROM current_schedule WHERE class_code=?, ${n} =? `;
-                await pool.query(sqlDelete, [classCode, time], (err, result, field) =>{
+                let sqlDelete = `UPDATE main_schedule SET ${day} = NULL WHERE class_code=? `;
+                await pool.query(sqlDelete, [classCode], (err, result, field) =>{
 
                     if(err){
                         return reject({
@@ -107,14 +106,11 @@ module.exports={
     })
     },
 
-    updateClass: ({classCode, date, time}) => {
+    updateClass_everyWeek: ({classCode, day, time}) => {
 
         return new Promise (async (resolve, reject) =>{
 
-            let classDay = new Date(date).getDay();
-            let n = weekday[classDay];
-
-            let sqlSearch = `SELECT ${n} FROM current_schedule WHERE class_code=?`;
+            let sqlSearch = `SELECT ${day} FROM main_schedule WHERE class_code=?`;
             await pool.query(sqlSearch, [classCode], async(err, result, field) =>{
             
                 if(err){
@@ -124,9 +120,9 @@ module.exports={
                     });
                 }
 
-                if(!result){
+                if(result){
            
-                    let sqlInsert = `UPDATE current_schedule SET ${n} =? WHERE class_code=?`;
+                    let sqlInsert = `UPDATE main_schedule SET ${day} =? WHERE class_code=?`;
 
                     await pool.query(sqlInsert, [time, classCode], (err, result, field) =>{
 
