@@ -87,6 +87,6 @@ module.exports = {
                 res.send(e);
                 res.end();
             });
-    },
+    }
 
 };

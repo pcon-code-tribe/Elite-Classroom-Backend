@@ -1,14 +1,20 @@
 const pool = require('../../config/database');
 
 module.exports = {
-    getNotes: ({ class_code }) => {
+    getNotes: ({ id }) => {
         return new Promise(async (resolve, reject) => {
-            let sql = `SELECT * from notes WHERE class_code = ?`;
-            await pool.query(sql, [class_code], (err, result, field) => {
+            let sql = `SELECT * from notes WHERE notes_id = ?`;
+            await pool.query(sql, [id], (err, result, field) => {
                 if (err) {
                     return reject({
                         status: 500,
                         error: err,
+                    });
+                }
+                if (result.length === 0) {
+                    return reject({
+                        status: 400,
+                        error: 'no such notes exist',
                     });
                 }
                 return resolve(result);
@@ -61,7 +67,7 @@ module.exports = {
 
     createNotes: ({ attachment_id, posted_on }, { class_code }) => {
         return new Promise(async (resolve, reject) => {
-            let sql = `INSERT INTO notes (attachment_id, posted_on, class_code) VALUES (?,?, ?)`;
+            let sql = `INSERT INTO notes (attachment_id, posted_on, class_code) VALUES (?,?,?)`;
             await pool.query(
                 sql, [attachment_id, posted_on, class_code], (err, result, field) => {
                     if (err) {
