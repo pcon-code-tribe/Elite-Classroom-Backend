@@ -54,7 +54,6 @@ module.exports = {
                     error: err,
                   });
                 }
-                console.log(result);
                 return resolve(result);
               }
             );
