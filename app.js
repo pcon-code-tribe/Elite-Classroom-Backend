@@ -1,24 +1,22 @@
 require("dotenv").config();
 const express = require("express");
-const mysql = require("mysql"); //this
+const mysql = require("mysql");
 const app = express();
 const routes = require("./api/router");
-const PORT = process.env.PORT || 4000; //this
+const PORT = process.env.PORT || 4000;
 app.use(express.json());
 
 
 
-const pool = require("./config/database"); //this
-//app.use("/api/users", router);
+const pool = require("./config/database");
+app.use("/api", routes);
 
 
 
 
-console.log('process.env') //this
+console.log('process.env');
 
-const classRoutes = require('./routes/classwork');
 
-app.use('/', classRoutes);
 
 
 
