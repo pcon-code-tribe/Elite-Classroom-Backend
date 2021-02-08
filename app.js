@@ -1,26 +1,13 @@
-require("dotenv").config();
-const express = require("express");
-const mysql = require("mysql");
+
+require('dotenv').config();
+const express = require('express');
 const app = express();
-const routes = require("./api/router");
-const PORT = process.env.PORT || 4000;
+const routes = require('./api/router');
+const PORT = process.env.PORT || 3300;
+
 app.use(express.json());
-
-
-
-const pool = require("./config/database");
-app.use("/api", routes);
-
-
-
-
-console.log('process.env');
-
-
-
-
+app.use('/api', routes);
 
 
 app.listen(PORT, () => {
-    console.log("Server up and running on ", PORT);
-});
+  console.log('Server up and running on ', PORT);
