@@ -28,36 +28,41 @@ module.exports = {
   joinClassroom: ({ reg_id, classCode }) => {
     return new Promise(async (resolve, reject) => {
       let sqlSearch =
-        'SELECT classes.class_code FROM classes, users WHERE users.registration_no = ? AND users.user_id = classes.user_id'; //  checking if user already joined classroom
+        'SELECT classes.class_code FROM classes, users WHERE users.registration_no = ? AND users.user_id = classes.user_id AND classes.class_code = ?'; //  checking if user already joined classroom
 
-      await pool.query(sqlSearch, [reg_id], async (err, result, field) => {
-        if (err) {
-          return reject({
-            status: 500,
-            error: err,
-          });
-        }
+      await pool.query(
+        sqlSearch,
+        [reg_id, classCode],
+        async (err, result, field) => {
+          if (err) {
+            return reject({
+              status: 500,
+              error: err,
+            });
+          }
 
-        if (result.length === 0) {
-          let sqlInsert =
-            'INSERT INTO classes SET user_id = (SELECT user_id FROM users WHERE registration_no = ?), class_code = ?';
-          await pool.query(
-            sqlInsert,
-            [reg_id, classCode, classCode],
-            (err, result, field) => {
-              if (err) {
-                return reject({
-                  status: 500,
-                  error: err,
-                });
+          if (result.length === 0) {
+            let sqlInsert =
+              'INSERT INTO classes SET user_id = (SELECT user_id FROM users WHERE registration_no = ?), class_code = ?';
+            await pool.query(
+              sqlInsert,
+              [reg_id, classCode],
+              (err, result, field) => {
+                if (err) {
+                  return reject({
+                    status: 500,
+                    error: err,
+                  });
+                }
+                console.log(result);
+                return resolve(result);
               }
-              return resolve(result);
-            }
-          );
-        }
+            );
+          }
 
-        return resolve(result);
-      });
+          return resolve(result);
+        }
+      );
     });
   },
 };
