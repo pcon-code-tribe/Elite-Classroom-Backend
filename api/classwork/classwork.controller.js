@@ -8,7 +8,7 @@ module.exports = {
                     res.status(500);
                     return res.json({
                         success: 0,
-                        message: 'Error occurred while getting the notes',
+                        message: 'Error occurred while getting work',
                     });
                 } else {
                     res.status(200);
@@ -29,7 +29,7 @@ module.exports = {
                     res.status(500);
                     return res.json({
                         success: 0,
-                        message: 'Error occurred while updating notes',
+                        message: 'Error occurred while updating work',
                     });
                 } else {
                     res.status(200);
@@ -50,7 +50,7 @@ module.exports = {
                     res.status(500);
                     return res.json({
                         success: 0,
-                        message: 'Error occurred while deleting the notes',
+                        message: 'Error occurred while deleting work',
                     });
                 } else {
                     res.status(200);
@@ -71,7 +71,7 @@ module.exports = {
                     res.status(500);
                     return res.json({
                         success: 0,
-                        message: 'Error occurred while creating the notes',
+                        message: 'Error occurred while creating work',
                     });
                 } else {
                     res.status(200);
