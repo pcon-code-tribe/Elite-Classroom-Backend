@@ -2,7 +2,8 @@ const pool = require('../../config/database');
 
 module.exports = {
   createUser: ({ name, email, registration_no, google_token }) => {
-    registration_no = registration_no.toUpperCase(); // converting the roll to uppercase only
+    if (typeof registration_no !== 'undefined')
+      registration_no = registration_no.toUpperCase(); // converting the roll to uppercase only
 
     return new Promise(async (resolve, reject) => {
       let sqlSearch = 'SELECT * FROM users WHERE google_token = ?'; //  checking if the user already exists
