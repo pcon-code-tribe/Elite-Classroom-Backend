@@ -51,7 +51,7 @@ module.exports = {
         async (error, result, field) => {
           if (result.length === 0) {
             return reject({
-              status: 500,
+              status: 400,
               error,
               message: 'User is not registered',
             });
