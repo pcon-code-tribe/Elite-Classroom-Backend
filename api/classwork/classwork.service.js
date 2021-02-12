@@ -3,7 +3,8 @@ const pool = require('../../config/database');
 module.exports = {
   getClasswork: ({ class_code }) => {
     return new Promise(async (resolve, reject) => {
-      let sql = `SELECT * from class_works WHERE class_code = ?`;
+      let sql = `SELECT class_works.class_code, class_works.title, class_works.description, class_works.type, class_works.attachment, class_works.created_date, class_works.due_date FROM class_works WHERE class_code = ?`;
+
       await pool.query(sql, [class_code], (error, result, field) => {
         if (error) {
           return reject({
@@ -23,7 +24,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       //  checking if classwork is being updated by the owner
       let checkSql =
-        'SELECT user_id FROM users, classroom WHERE users.user_id = classroom.owner_id AND google_token = ?';
+        'SELECT user_id FROM users JOIN classroom ON (users.user_id = classroom.owner_id) AND google_token = ?';
 
       await pool.query(
         checkSql,
@@ -73,7 +74,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       //  checking if classwork is being deleted by the owner
       let checkSql =
-        'SELECT user_id FROM users, classroom WHERE users.user_id = classroom.owner_id AND google_token = ?';
+        'SELECT user_id FROM users JOIN classroom ON (users.user_id = classroom.owner_id) AND google_token = ?';
 
       await pool.query(
         checkSql,
@@ -127,7 +128,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       //  checking if classwork is being created by the owner
       let checkSql =
-        'SELECT user_id FROM users, classroom WHERE users.user_id = classroom.owner_id AND classroom.class_code = ? AND google_token = ?';
+        'SELECT user_id FROM users JOIN classroom ON (users.user_id = classroom.owner_id AND classroom.class_code = ?) AND google_token = ?';
 
       await pool.query(
         checkSql,
