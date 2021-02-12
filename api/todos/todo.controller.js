@@ -6,80 +6,59 @@ const {
 
 module.exports = {
   notTurnedIn: (req, res) => {
-    notTurnedInTodo(req.params.reg_id)
+    notTurnedInTodo(req.body)
       .then((result) => {
         if (!result) {
-          res.status(500);
-          return res.json({
+          return res.status(500).json({
             success: 0,
             message: 'Error occurred while retrieving Not turned in todo',
           });
         }
 
-        res.status(200);
-
-        return res.json({
+        return res.status(200).json({
           success: 1,
           message: 'Not turned in todo retrieved',
           data: result,
         });
       })
-      .catch((e) => {
-        res.status(e.status);
-        res.send(e);
-        res.end();
-      });
+      .catch((e) => res.status(e.status).send(e).end());
   },
 
   missing: (req, res) => {
-    missingTodo(req.params.reg_id)
+    missingTodo(req.body)
       .then((result) => {
         if (!result) {
-          res.status(500);
-          return res.json({
+          return res.status(500).json({
             success: 0,
             message: 'Error occurred while retrieving missing todo',
           });
         }
 
-        res.status(200);
-
-        return res.json({
+        return res.status(200).json({
           success: 1,
           message: 'Missing todo retrieved',
           data: result,
         });
       })
-      .catch((e) => {
-        res.status(e.status);
-        res.send(e);
-        res.end();
-      });
+      .catch((e) => res.status(e.status).send(e).end());
   },
 
   turnedIn: (req, res) => {
-    turnedInTodo(req.params.reg_id)
+    turnedInTodo(req.body)
       .then((result) => {
         if (!result) {
-          res.status(500);
-          return res.json({
+          return res.status(500).json({
             success: 0,
             message: 'Error occurred while retrieving turnedIn todo',
           });
         }
 
-        res.status(200);
-
-        return res.json({
+        return res.status(200).json({
           success: 1,
           message: 'TurnedIn todo retrieved',
           data: result,
         });
       })
-      .catch((e) => {
-        res.status(e.status);
-        res.send(e);
-        res.end();
-      });
+      .catch((e) => res.status(e.status).send(e).end());
   },
 };
