@@ -43,7 +43,6 @@ module.exports = {
         return res.json({
           success: 1,
           message: 'Classroom joined',
-          data: result,
         });
       })
       .catch((e) => {
