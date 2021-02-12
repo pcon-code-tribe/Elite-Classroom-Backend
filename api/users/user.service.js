@@ -1,17 +1,14 @@
 const pool = require('../../config/database');
 
 module.exports = {
-  createUser: ({ name, email, registration_no, google_token }) => {
-    if (typeof registration_no !== 'undefined')
-      registration_no = registration_no.toUpperCase(); // converting the roll to uppercase only
-
+  createUser: ({ name, email, google_token }) => {
     return new Promise(async (resolve, reject) => {
       let sqlSearch = 'SELECT * FROM users WHERE google_token = ?'; //  checking if the user already exists
 
       await pool.query(
         sqlSearch,
         [google_token],
-        async (err, result, field) => {
+        async (error, result, field) => {
           if (!google_token) {
             return reject({
               status: 422,
@@ -19,24 +16,25 @@ module.exports = {
             });
           }
 
-          if (err) {
+          if (error) {
             return reject({
               status: 500,
-              error: err,
+              error,
             });
           }
 
           if (result.length === 0) {
             let sqlInsert =
-              'INSERT INTO users (name, email, registration_no, google_token) VALUES (?,?,?,?)';
+              'INSERT INTO users (name, email, google_token) VALUES (?,?,?)';
             await pool.query(
               sqlInsert,
-              [name, email, registration_no, google_token],
+              [name, email, google_token],
               (error, results, fields) => {
                 if (error) {
                   return reject({
                     status: 500,
-                    error: 'Insertion to database failed',
+                    message: 'Insertion to database failed',
+                    error,
                   });
                 }
 
