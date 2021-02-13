@@ -21,7 +21,7 @@ module.exports = {
 
           //  inserting owner into the classroom made
           let insertOwner =
-            'INSERT INTO classes SET user_id = (SELECT user_id FROM users WHERE google_token = ?), class_code = ?';
+            'INSERT INTO classes (user_id, class_code) VALUES ((SELECT user_id FROM users WHERE google_token = ?), ?)';
 
           await pool.query(
             insertOwner,
@@ -49,6 +49,13 @@ module.exports = {
         sqlFindUser,
         [google_token],
         async (error, result, field) => {
+          if (error) {
+            return reject({
+              status: 500,
+              error,
+            });
+          }
+
           if (result.length === 0) {
             return reject({
               status: 400,
@@ -57,12 +64,12 @@ module.exports = {
             });
           }
 
-          let sqlSearch =
-            'SELECT classes.class_code FROM classes, users WHERE users.google_token = ? AND users.user_id = classes.user_id AND classes.class_code = ?'; //  checking if user already joined classroom
+          let sqlFindClass =
+            'SELECT class_code FROM classroom WHERE class_code = ?';
 
           await pool.query(
-            sqlSearch,
-            [google_token, classCode],
+            sqlFindClass,
+            [classCode],
             async (error, result, field) => {
               if (error) {
                 return reject({
@@ -72,24 +79,53 @@ module.exports = {
               }
 
               if (result.length === 0) {
-                let sqlInsert =
-                  'INSERT INTO classes SET user_id = (SELECT user_id FROM users WHERE google_token = ?), class_code = ?';
-                await pool.query(
-                  sqlInsert,
-                  [google_token, classCode],
-                  (error, result, field) => {
-                    if (error) {
-                      return reject({
-                        status: 500,
-                        error,
-                      });
-                    }
-                    return resolve(result);
-                  }
-                );
+                return reject({
+                  status: 400,
+                  error,
+                  message: 'Class does not exist',
+                });
               }
 
-              return resolve(result);
+              let sqlFindUserInClass =
+                'SELECT classes.user_id FROM classes JOIN users ON (users.user_id = classes.user_id AND users.google_token = ?) WHERE classes.class_code = ?';
+
+              await pool.query(
+                sqlFindUserInClass,
+                [google_token, classCode],
+                async (error, result, field) => {
+                  if (error) {
+                    return reject({
+                      status: 500,
+                      error,
+                    });
+                  }
+
+                  if (result.length !== 0) {
+                    return reject({
+                      status: 500,
+                      error,
+                      message: 'User already in classroom',
+                    });
+                  }
+
+                  let sqlInsertUserInClass =
+                    'INSERT INTO classes (user_id, class_code) VAlUES ((SELECT user_id FROM users WHERE google_token = ?), ?)';
+                  await pool.query(
+                    sqlInsertUserInClass,
+                    [google_token, classCode],
+                    (error, result, field) => {
+                      if (error) {
+                        return reject({
+                          status: 500,
+                          error,
+                        });
+                      }
+
+                      return resolve(result);
+                    }
+                  );
+                }
+              );
             }
           );
         }
