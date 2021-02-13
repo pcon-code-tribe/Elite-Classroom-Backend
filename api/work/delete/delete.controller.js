@@ -1,5 +1,5 @@
 const {getSubmission,deleteSubmission} = require("./delete.services");
-const {deleteWork} = require("../work.services");
+const {deleteWork} = require("../work.services.v2");
 
 module.exports = {
     deleteSubmission: (req, res) => {

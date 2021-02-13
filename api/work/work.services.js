@@ -3,8 +3,8 @@ const AWS = require('aws-sdk');
 const {uuid} = require('uuidv4');
 
 const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    accessKeyId: process.env.AWS_ID,
+    secretAccessKey: process.env.AWS_SECRET
 });
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
         const fileType = myfile[myfile.length - 1];
 
         var params ={
-            Bucket:process.env.S3_BUCKET_NAME,
+            Bucket:process.env.AWS_BUCKET_NAME,
             Key:`${uuid()}.${fileType}`,
             Body:data.buffer,
         }
@@ -49,7 +49,7 @@ module.exports = {
         });
     },
     checkUser:(uid,callback)=>{
-        
+
         var sql = "SELECT * FROM users WHERE user_id = ?";
         pool.query(sql,[uid],(err,result,fields)=>{
             if(err){
