@@ -3,3 +3,4 @@ node_modules
 uploads
 public_chats
 serviceAccountKey.json
+chat/record.txt
