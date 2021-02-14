@@ -2,7 +2,7 @@ const { getClass } = require('./getClasses.service');
 
 module.exports = {
   classes: (req, res) => {
-    getClass(req.body)
+    getClass(req.params)
       .then((result) => {
         if (!result) {
           res.status(500);
