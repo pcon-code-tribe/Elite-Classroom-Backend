@@ -22,6 +22,7 @@
     "mysql": "^2.18.1",
     "nanoid": "^3.1.20",
     "socket.io": "^3.1.1",
+    "unique-names-generator": "^4.3.1",
     "uuidv4": "^6.2.6"
   },
   "devDependencies": {
