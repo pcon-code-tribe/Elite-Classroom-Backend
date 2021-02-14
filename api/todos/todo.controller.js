@@ -6,7 +6,7 @@ const {
 
 module.exports = {
   notTurnedIn: (req, res) => {
-    notTurnedInTodo(req.body)
+    notTurnedInTodo(req.params)
       .then((result) => {
         if (!result) {
           return res.status(500).json({
@@ -25,7 +25,7 @@ module.exports = {
   },
 
   missing: (req, res) => {
-    missingTodo(req.body)
+    missingTodo(req.params)
       .then((result) => {
         if (!result) {
           return res.status(500).json({
@@ -44,7 +44,7 @@ module.exports = {
   },
 
   turnedIn: (req, res) => {
-    turnedInTodo(req.body)
+    turnedInTodo(req.params)
       .then((result) => {
         if (!result) {
           return res.status(500).json({
