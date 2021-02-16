@@ -4,6 +4,7 @@ const {writeRecord,readRecord} = require('./recorder');
 
 //this stores the current room acquired by each connections
 var connections= new Map();
+var users = new Map();
 
 
 module.exports = function(io){
@@ -30,20 +31,27 @@ module.exports = function(io){
 
     //joining a connection to a room class_id
     socket.on('connectRoom',(data)=>{
-      const room = data.class_id;
-      connections.set(socket.client.id,room);
+      let {room,user_id} = data;
+
+      //sets socket used to conect against each userid
+      users.set(user_id,socket);
+      console.log(users);
+
+      //sets user info for each socket
+      connections.set(socket.client.id,{user_id:user_id,room:room});
       console.log(connections);
+
       readRecord(room,(err,info)=>{
         if(err){
-          console.log(err);
-          socket.send(err);
+          // console.log(err);
+          socket.emit('error',err);
         }else{
-          console.log(info);
-          socket.send(info);
+          // console.log(info);
+          socket.emit('allMsg',info);
         }
       });
       socket.join(`${room}`);
-    })
+    });
 
     socket.on('disconnect',()=>{
       connections.delete(socket.client.id);

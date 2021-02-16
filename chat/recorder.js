@@ -40,7 +40,10 @@ module.exports = {
          var sendData = [];
          info.forEach((item, i) => {
            if(item.split('|')[1] == room_id){
-             sendData.push(JSON.parse(item.split('|')[2]))
+             sendData.push({
+               msg:JSON.parse(item.split('|')[2]),
+               time:item.split('|')[0]
+             });
            }
          });
 
