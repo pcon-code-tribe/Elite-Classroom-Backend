@@ -1,6 +1,6 @@
 const socketIO = require('socket.io');
 const express = require('express');
-const {writeRecord} = require('./recorder');
+const {writeRecord,readRecord} = require('./recorder');
 
 //this stores the current room acquired by each connections
 var connections= new Map();
@@ -15,7 +15,7 @@ module.exports = function(io){
   io.on('connection',(socket)=>{
     console.log('new user connected chat');
 
-    //sending and storinf messages
+    //sending and storing messages
     socket.on('newMsg',(data)=>{
       const room = data.class_id;
       console.log(data);
@@ -33,6 +33,15 @@ module.exports = function(io){
       const room = data.class_id;
       connections.set(socket.client.id,room);
       console.log(connections);
+      readRecord(room,(err,info)=>{
+        if(err){
+          console.log(err);
+          socket.send(err);
+        }else{
+          console.log(info);
+          socket.send(info);
+        }
+      });
       socket.join(`${room}`);
     })
 
