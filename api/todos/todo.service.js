@@ -4,7 +4,7 @@ module.exports = {
   notTurnedInTodo: ({ google_token }) => {
     return new Promise(async (resolve, reject) => {
       let sql =
-        'SELECT class_works.title, class_works.description, class_works.type, class_works.created_date, class_works.due_date, classroom.class_name, classroom.owner_id, (SELECT name FROM users WHERE classroom.owner_id = users.user_id) as owner_name FROM class_works, classroom, users, classes WHERE class_works.due_date >= current_timestamp() AND class_works.class_code = classroom.class_code AND classes.user_id = users.user_id AND users.google_token = ?';
+        'SELECT class_works.title, class_works.description, class_works.type, class_works.created_date, class_works.due_date, classroom.class_name, classroom.owner_id FROM class_works JOIN classroom ON (class_works.class_code = classroom.class_code) JOIN users ON (classroom.owner_id = users.user_id) AND class_works.due_date >= current_timestamp() AND users.google_token = ?';
 
       await pool.query(sql, [google_token], (error, result, field) => {
         if (error) {
