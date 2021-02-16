@@ -132,4 +132,41 @@ module.exports = {
       );
     });
   },
+
+  getClassroomInfo: ({ classCode }) => {
+    return new Promise(async (resolve, reject) => {
+      let sql =
+        'SELECT classroom.class_code, classroom.class_name, classroom.owner_id, classroom.created_on, users.name as owner_name, users.email as owner_email FROM classroom JOIN users ON (users.user_id = classroom.owner_id) WHERE classroom.class_code = ?';
+
+      await pool.query(
+        sql,
+        [classCode],
+        async (error, resultClassInfo, field) => {
+          if (error) {
+            return reject({
+              status: 500,
+              error,
+            });
+          }
+
+          let participantSql =
+            'SELECT classes.user_id, classes.joined_on, users.name FROM classes JOIN users ON (users.user_id = classes.user_id) WHERE classes.class_code = ?';
+
+          await pool.query(
+            participantSql,
+            [classCode],
+            (error, participants, field) => {
+              if (error) {
+                return reject({
+                  status: 500,
+                  error,
+                });
+              }
+              return resolve({ ...resultClassInfo, participants });
+            }
+          );
+        }
+      );
+    });
+  },
 };

@@ -1,4 +1,8 @@
-const { createClassroom, joinClassroom } = require('./classroom.service');
+const {
+  createClassroom,
+  joinClassroom,
+  getClassroomInfo,
+} = require('./classroom.service');
 
 module.exports = {
   newClassroom: (req, res) => {
@@ -35,6 +39,27 @@ module.exports = {
         return res.status(200).json({
           success: 1,
           message: 'Classroom joined',
+        });
+      })
+      .catch((e) => {
+        res.status(e.status).send(e).end();
+      });
+  },
+
+  getClassroom: (req, res) => {
+    getClassroomInfo(req.params)
+      .then((result) => {
+        if (!result) {
+          return res.status(500).json({
+            success: 0,
+            message: 'Error occurred while getting classroom info',
+          });
+        }
+
+        return res.status(200).json({
+          success: 1,
+          message: 'Classroom info retrieved',
+          data: result,
         });
       })
       .catch((e) => {
