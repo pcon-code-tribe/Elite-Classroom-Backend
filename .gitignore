@@ -4,3 +4,4 @@ uploads
 public_chats
 serviceAccountKey.json
 chat/record.txt
+chat/read.json

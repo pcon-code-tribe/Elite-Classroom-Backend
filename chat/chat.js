@@ -1,6 +1,7 @@
 const socketIO = require('socket.io');
 const express = require('express');
 const {writeRecord,readRecord} = require('./recorder');
+const {setMsgInfo,getMsgInfo} = require('./reader');
 
 //this stores the current room acquired by each connections
 var connections= new Map();
@@ -17,7 +18,7 @@ module.exports = function(io){
     console.log('new user connected chat');
 
     //sending and storing messages
-    socket.on('newMsg',(data)=>{
+    socket.on('sendMsg',(data)=>{
       const room = data.class_id;
       console.log(data);
       writeRecord(data,err=>{
@@ -32,10 +33,11 @@ module.exports = function(io){
     //joining a connection to a room class_id
     socket.on('connectRoom',(data)=>{
       let {room,user_id} = data;
+      console.log(room);
 
       //sets socket used to conect against each userid
       users.set(user_id,socket);
-      console.log(users);
+      // console.log(users);
 
       //sets user info for each socket
       connections.set(socket.client.id,{user_id:user_id,room:room});
@@ -53,7 +55,36 @@ module.exports = function(io){
       socket.join(`${room}`);
     });
 
-    //when user reads a message 
+    //when user reads a message
+    socket.on('readMsg',(data)=>{
+      let {id,user_id,user_name} = data;
+
+      console.log(id);
+
+      setMsgInfo(data,(err)=>{
+        if(err){
+          console.log(err);
+          socket.emit('error','Opps! some error occured')
+        }
+      });
+
+    });
+
+    //when user wants to get read info for a message
+    socket.on('aboutMsgDetail',(data)=>{
+      let {id} = data;
+
+      getMsgInfo(id,(err,info)=>{
+        if(err){
+          console.log(err);
+          socket.emit('error','failed to get details');
+        }else{
+          console.log(info);
+            socket.emit('sendMsgDetail',(info));
+        }
+      });
+
+    });
 
     socket.on('disconnect',()=>{
       connections.delete(socket.client.id);
