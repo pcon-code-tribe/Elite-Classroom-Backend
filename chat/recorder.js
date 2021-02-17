@@ -1,4 +1,5 @@
 const fs = require('fs');
+const {v4} = require('uuid');
 
 fs.open('chat/record.txt','r',(err,file)=>{
   if(err){
@@ -20,8 +21,9 @@ module.exports = {
     const timestamp = new Date();
     const room = data.class_id;
     const newData = JSON.stringify(data);
+    const id = v4();
 
-    const content = `${timestamp}|${room}|${newData}|\n`;
+    const content = `${timestamp}|${room}|${newData}|${id}|\n`;
     fs.appendFile('chat/record.txt',content,err=>{
       if(err){
         return callback(err);
@@ -40,8 +42,12 @@ module.exports = {
          var sendData = [];
          info.forEach((item, i) => {
            if(item.split('|')[1] == room_id){
+             const currMsg = JSON.parse(item.split('|')[2]);
              sendData.push({
-               msg:JSON.parse(item.split('|')[2]),
+               id:item.split('|')[3],
+               msg:currMsg.msg,
+               sender:currMsg.sender,
+               class:currMsg.class_id,
                time:item.split('|')[0]
              });
            }

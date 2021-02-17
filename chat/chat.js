@@ -53,6 +53,8 @@ module.exports = function(io){
       socket.join(`${room}`);
     });
 
+    //when user reads a message 
+
     socket.on('disconnect',()=>{
       connections.delete(socket.client.id);
       console.log(connections);
