@@ -5,13 +5,13 @@ const socketIO = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 const routes = require('./api/router');
-const PORT = process.env.PORT || 4000;
 
 // const io = socketIO(server,{
 //   cors: {
 //     origin: '*',
 //   }
 // });
+const PORT = process.env.PORT || 3300;
 
 app.use(express.json());
 app.use('/api', routes);

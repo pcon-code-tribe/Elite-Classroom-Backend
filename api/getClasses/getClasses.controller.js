@@ -2,7 +2,7 @@ const { getClass } = require('./getClasses.service');
 
 module.exports = {
   classes: (req, res) => {
-    getClass(req.body)
+    getClass(req.params)
       .then((result) => {
         if (!result) {
           res.status(500);
@@ -13,7 +13,11 @@ module.exports = {
         }
 
         res.status(200);
-        return res.send(result);
+        return res.json({
+          success: 1,
+          message: 'Fetched classes',
+          data: result,
+        });
       })
 
       .catch((e) => {

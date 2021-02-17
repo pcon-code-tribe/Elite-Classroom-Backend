@@ -1,12 +1,12 @@
 const pool = require('../../config/database');
 
 module.exports = {
-  getClass: ({ reg_id }) => {
+  getClass: ({ google_token }) => {
     return new Promise(async (resolve, reject) => {
       let sql =
-        'SELECT classroom.class_name, classroom.class_code, classroom.prof_id, users.registration_no FROM classroom, classes, users WHERE users.registration_no = ? AND classes.user_id = users.user_id';
+        'SELECT classes.class_code, classroom.class_name, classroom.owner_id, (SELECT COUNT(user_id) FROM classes WHERE (classes.class_code = classroom.class_code)) as number_of_participants, users.name as owner_name FROM classes JOIN classroom ON (classes.class_code = classroom.class_code) JOIN users ON (classroom.owner_id = users.user_id) AND (classes.user_id = (SELECT user_id FROM users WHERE google_token = ?))';
 
-      await pool.query(sql, [reg_id], (err, result, field) => {
+      await pool.query(sql, [google_token], (err, result, field) => {
         if (err) {
           return reject({
             status: 500,

@@ -1,28 +1,28 @@
-const { createClassroom, joinClassroom } = require('./classroom.service');
+const {
+  createClassroom,
+  joinClassroom,
+  getClassroomInfo,
+} = require('./classroom.service');
 
 module.exports = {
   newClassroom: (req, res) => {
     createClassroom(req.body)
       .then((result) => {
         if (!result) {
-          res.status(500);
-          return res.json({
+          return res.status(500).json({
             success: 0,
             message: 'Error occurred while creating classroom',
           });
         }
 
-        res.status(200);
-
-        return res.json({
+        return res.status(200).json({
           success: 1,
           message: 'Classroom created',
+          data: result,
         });
       })
       .catch((e) => {
-        res.status(e.status);
-        res.send(e);
-        res.end();
+        res.status(e.status).send(e).end();
       });
   },
 
@@ -30,24 +30,40 @@ module.exports = {
     joinClassroom(req.body)
       .then((result) => {
         if (!result) {
-          res.status(500);
-          return res.json({
+          return res.status(500).json({
             success: 0,
             message: 'Error occurred while joining Classroom',
           });
         }
 
-        res.status(200);
-
-        return res.json({
+        return res.status(200).json({
           success: 1,
           message: 'Classroom joined',
         });
       })
       .catch((e) => {
-        res.status(e.status);
-        res.send(e);
-        res.end();
+        res.status(e.status).send(e).end();
+      });
+  },
+
+  getClassroom: (req, res) => {
+    getClassroomInfo(req.params)
+      .then((result) => {
+        if (!result) {
+          return res.status(500).json({
+            success: 0,
+            message: 'Error occurred while getting classroom info',
+          });
+        }
+
+        return res.status(200).json({
+          success: 1,
+          message: 'Classroom info retrieved',
+          data: result,
+        });
+      })
+      .catch((e) => {
+        res.status(e.status).send(e).end();
       });
   },
 };
