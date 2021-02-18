@@ -3,7 +3,7 @@ const pool = require('../../config/database');
 module.exports = {
   getClasswork: ({ class_code }) => {
     return new Promise(async (resolve, reject) => {
-      let sql = `SELECT class_works.work_id, class_works.class_code, class_works.title, class_works.description, class_works.type, class_works.attachment, class_works.created_date, class_works.due_date FROM class_works WHERE class_code = ?`;
+      let sql = `SELECT class_works.work_id, class_works.class_code, class_works.title, class_works.description, class_works.type, class_works.attachment, class_works.created_date, class_works.due_date, class_works.points FROM class_works WHERE class_code = ?`;
 
       await pool.query(sql, [class_code], (error, result, field) => {
         if (error) {
@@ -19,7 +19,7 @@ module.exports = {
 
   updateClasswork: (
     { work_id },
-    { title, description, type, attachment, due_date, google_token }
+    { title, description, type, attachment, due_date, points, google_token }
   ) => {
     return new Promise(async (resolve, reject) => {
       //  checking if classwork is being updated by the owner
@@ -45,10 +45,10 @@ module.exports = {
             });
           }
 
-          let sql = `UPDATE class_works SET title = ?, description = ?, type = ?, attachment = ?, due_date = ? WHERE work_id = ?`;
+          let sql = `UPDATE class_works SET title = ?, description = ?, type = ?, attachment = ?, due_date = ?, points = ? WHERE work_id = ?`;
           await pool.query(
             sql,
-            [title, description, type, attachment, due_date, work_id],
+            [title, description, type, attachment, due_date, points, work_id],
             (error, result, field) => {
               if (error) {
                 return reject({
@@ -123,6 +123,7 @@ module.exports = {
     type,
     attachment,
     due_date,
+    points,
     google_token,
   }) => {
     return new Promise(async (resolve, reject) => {
@@ -149,11 +150,19 @@ module.exports = {
             });
           }
 
-          let sql = `INSERT INTO class_works (class_code, title, description, type, attachment, due_date) VALUES (?, ?, ?, ?, ?, ?)`;
+          let sql = `INSERT INTO class_works (class_code, title, description, type, attachment, points, due_date) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
           await pool.query(
             sql,
-            [class_code, title, description, type, attachment, due_date],
+            [
+              class_code,
+              title,
+              description,
+              type,
+              attachment,
+              points,
+              due_date,
+            ],
             (error, result, field) => {
               if (error) {
                 return reject({
