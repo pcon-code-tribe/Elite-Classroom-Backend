@@ -3,7 +3,7 @@ const pool = require('../../config/database');
 module.exports = {
   getClasswork: ({ class_code }) => {
     return new Promise(async (resolve, reject) => {
-      let sql = `SELECT class_works.class_code, class_works.title, class_works.description, class_works.type, class_works.attachment, class_works.created_date, class_works.due_date FROM class_works WHERE class_code = ?`;
+      let sql = `SELECT class_works.work_id, class_works.class_code, class_works.title, class_works.description, class_works.type, class_works.attachment, class_works.created_date, class_works.due_date FROM class_works WHERE class_code = ?`;
 
       await pool.query(sql, [class_code], (error, result, field) => {
         if (error) {
