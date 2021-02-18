@@ -46,7 +46,10 @@ module.exports = {
   },
 
   //update a particular note via given notes_id
-  updateNotes: ({ id }, { attachment_id, google_token }) => {
+  updateNotes: (
+    { id },
+    { title, description, attachment_id, google_token }
+  ) => {
     return new Promise(async (resolve, reject) => {
       //  checking if notes is being updated by the owner
       let checkSql =
@@ -71,23 +74,27 @@ module.exports = {
             });
           }
 
-          let sql = `UPDATE notes SET attachment_id = ? WHERE notes_id = ?`;
+          let sql = `UPDATE notes SET title = ?, description = ?, attachment_id = ? WHERE notes_id = ?`;
 
-          await pool.query(sql, [attachment_id, id], (error, result, field) => {
-            if (error) {
-              return reject({
-                status: 400,
-                error,
-              });
+          await pool.query(
+            sql,
+            [title, description, attachment_id, id],
+            (error, result, field) => {
+              if (error) {
+                return reject({
+                  status: 400,
+                  error,
+                });
+              }
+              if (result.affectedRows === 0) {
+                return reject({
+                  status: 400,
+                  error: 'No such note exists',
+                });
+              }
+              return resolve(result);
             }
-            if (result.affectedRows === 0) {
-              return reject({
-                status: 400,
-                error: 'No such note exists',
-              });
-            }
-            return resolve(result);
-          });
+          );
         }
       );
     });
@@ -141,7 +148,10 @@ module.exports = {
   },
 
   // create a note in a particular class via its class_code
-  createNotes: ({ class_code }, { attachment_id, google_token }) => {
+  createNotes: (
+    { class_code },
+    { title, description, attachment_id, google_token }
+  ) => {
     return new Promise(async (resolve, reject) => {
       //  checking if notes is being created by the owner
       let checkSql =
@@ -166,10 +176,10 @@ module.exports = {
             });
           }
 
-          let sql = `INSERT INTO notes (attachment_id, posted_on, class_code) VALUES (?, current_timestamp(), ?)`;
+          let sql = `INSERT INTO notes (title, description, attachment_id, posted_on, class_code) VALUES (?, ?, ?, current_timestamp(), ?)`;
           await pool.query(
             sql,
-            [attachment_id, class_code],
+            [title, description, attachment_id, class_code],
             (error, result, field) => {
               if (error) {
                 return reject({
