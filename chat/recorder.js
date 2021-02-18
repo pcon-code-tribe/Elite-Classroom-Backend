@@ -16,6 +16,29 @@ fs.open('chat/record.txt','r',(err,file)=>{
 });
 
 
+//file to save messages on a json file
+fs.open('chat/messages.json','r',(err,file)=>{
+  if(err){
+    fs.open('chat/messages.json','w',(err,file)=>{
+      if(err){
+        console.log(err);
+      }else{
+        const content = {};
+        fs.writeFile('chat/messages.json',JSON.stringify(content),err=>{
+          if(err){
+            console.log(err);
+          }else{
+            console.log("messages is on now");
+          }
+        });
+      }
+    });
+  }else {
+    console.log("tracking messages!");
+  }
+});
+
+
 module.exports = {
   writeRecord:(data,callback)=>{
     const timestamp = new Date();
@@ -33,6 +56,7 @@ module.exports = {
     });
   },
   readRecord: (room_id,callback)=>{
+
     fs.readFile('chat/record.txt','utf8',(err,data)=>{
       if(err){
         console.log(err);

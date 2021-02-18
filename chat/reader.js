@@ -28,12 +28,15 @@ module.exports = {
       }else{
 
         try{
+
+          // console.log(data);
+
           var newData = JSON.parse(data);
           if(newData[`${id}`] === undefined){
             newData[`${id}`] = [JSON.stringify(info)];
           }else{
             var currData = newData[`${id}`];
-            currData.push(info);
+            currData.push(JSON.stringify(info));
             newData[`${id}`] = currData;
           }
 

@@ -1,6 +1,6 @@
 const socketIO = require('socket.io');
 const express = require('express');
-const {writeRecord,readRecord} = require('./recorder');
+const {writeRecord,readRecord} = require('./recorder.v2');
 const {setMsgInfo,getMsgInfo} = require('./reader');
 
 //this stores the current room acquired by each connections
@@ -33,7 +33,7 @@ module.exports = function(io){
     //joining a connection to a room class_id
     socket.on('connectRoom',(data)=>{
       let {room,user_id} = data;
-      console.log(room);
+      // console.log(room);
 
       //sets socket used to conect against each userid
       users.set(user_id,socket);
@@ -41,7 +41,7 @@ module.exports = function(io){
 
       //sets user info for each socket
       connections.set(socket.client.id,{user_id:user_id,room:room});
-      console.log(connections);
+      // console.log(connections);
 
       readRecord(room,(err,info)=>{
         if(err){
@@ -59,7 +59,7 @@ module.exports = function(io){
     socket.on('readMsg',(data)=>{
       let {id,user_id,user_name} = data;
 
-      console.log(id);
+      // console.log(id);
 
       setMsgInfo(data,(err)=>{
         if(err){
@@ -79,7 +79,7 @@ module.exports = function(io){
           console.log(err);
           socket.emit('error','failed to get details');
         }else{
-          console.log(info);
+          // console.log(info);
             socket.emit('sendMsgDetail',(info));
         }
       });
@@ -88,7 +88,7 @@ module.exports = function(io){
 
     socket.on('disconnect',()=>{
       connections.delete(socket.client.id);
-      console.log(connections);
+      // console.log(connections);
       console.log("a user disconnected");
     })
 
