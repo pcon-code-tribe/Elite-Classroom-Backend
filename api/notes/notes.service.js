@@ -4,7 +4,7 @@ module.exports = {
   //get a particular note via given notes_id
   getNotesId: ({ id }) => {
     return new Promise(async (resolve, reject) => {
-      let sql = `SELECT * from notes WHERE notes_id = ?`;
+      let sql = `SELECT notes.*, users.google_token as owner_token FROM notes JOIN classroom ON (notes.class_code = classroom.class_code) JOIN users ON (users.user_id = classroom.owner_id) WHERE notes.notes_id = ?`;
       await pool.query(sql, [id], (error, result, field) => {
         if (error) {
           return reject({
@@ -26,7 +26,7 @@ module.exports = {
   //get all notes via class_code
   getNotesCode: ({ class_code }) => {
     return new Promise(async (resolve, reject) => {
-      let sql = `SELECT * from notes WHERE class_code = ?`;
+      let sql = `SELECT notes.*, users.google_token as owner_token FROM notes JOIN classroom ON (notes.class_code = classroom.class_code) JOIN users ON (users.user_id = classroom.owner_id) WHERE notes.class_code = ?`;
       await pool.query(sql, [class_code], (error, result, field) => {
         if (error) {
           return reject({
