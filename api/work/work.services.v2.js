@@ -5,7 +5,7 @@ const {format} = require('util');
 
 const storage = new Storage({
     projectId: "elite-classroom-cdae0",
-    keyFilename: "serviceAccountKey.json"
+    keyFilename: "serviceAccountKey2.json"
 });
 
 const bucket = storage.bucket("gs://elite-classroom-cdae0.appspot.com");
