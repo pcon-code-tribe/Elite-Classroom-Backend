@@ -89,7 +89,7 @@ module.exports = {
     },
     downloadWork:(url, callback)=>{
         downloadFromCloud(url).then(data=>{
-            console.log(data);
+            // console.log(data);
             callback(null, data);
         }).catch(err=>{
             console.log(err);
