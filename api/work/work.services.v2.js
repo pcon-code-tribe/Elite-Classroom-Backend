@@ -1,7 +1,6 @@
 const pool = require('../../config/database');
 const {Storage} = require('@google-cloud/storage');
 const {uuid} = require('uuidv4');
-const Key = JSON.parse(process.env.SAK);
 const {format} = require('util');
 
 const storage = new Storage({
