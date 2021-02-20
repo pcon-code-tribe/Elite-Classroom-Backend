@@ -4,7 +4,7 @@ module.exports = {
   //get a particular note via given notes_id
   getNotesId: ({ id }) => {
     return new Promise(async (resolve, reject) => {
-      let sql = `SELECT * from notes WHERE notes_id = ?`;
+      let sql = `SELECT notes.*, users.google_token as owner_token FROM notes JOIN classroom ON (notes.class_code = classroom.class_code) JOIN users ON (users.user_id = classroom.owner_id) WHERE notes.notes_id = ?`;
       await pool.query(sql, [id], (error, result, field) => {
         if (error) {
           return reject({
@@ -26,7 +26,7 @@ module.exports = {
   //get all notes via class_code
   getNotesCode: ({ class_code }) => {
     return new Promise(async (resolve, reject) => {
-      let sql = `SELECT * from notes WHERE class_code = ?`;
+      let sql = `SELECT notes.*, users.google_token as owner_token FROM notes JOIN classroom ON (notes.class_code = classroom.class_code) JOIN users ON (users.user_id = classroom.owner_id) WHERE notes.class_code = ?`;
       await pool.query(sql, [class_code], (error, result, field) => {
         if (error) {
           return reject({
@@ -46,7 +46,10 @@ module.exports = {
   },
 
   //update a particular note via given notes_id
-  updateNotes: ({ id }, { attachment_id, google_token }) => {
+  updateNotes: (
+    { id },
+    { title, description, attachment_id, google_token }
+  ) => {
     return new Promise(async (resolve, reject) => {
       //  checking if notes is being updated by the owner
       let checkSql =
@@ -71,23 +74,27 @@ module.exports = {
             });
           }
 
-          let sql = `UPDATE notes SET attachment_id = ? WHERE notes_id = ?`;
+          let sql = `UPDATE notes SET title = ?, description = ?, attachment_id = ? WHERE notes_id = ?`;
 
-          await pool.query(sql, [attachment_id, id], (error, result, field) => {
-            if (error) {
-              return reject({
-                status: 400,
-                error,
-              });
+          await pool.query(
+            sql,
+            [title, description, attachment_id, id],
+            (error, result, field) => {
+              if (error) {
+                return reject({
+                  status: 400,
+                  error,
+                });
+              }
+              if (result.affectedRows === 0) {
+                return reject({
+                  status: 400,
+                  error: 'No such note exists',
+                });
+              }
+              return resolve(result);
             }
-            if (result.affectedRows === 0) {
-              return reject({
-                status: 400,
-                error: 'No such note exists',
-              });
-            }
-            return resolve(result);
-          });
+          );
         }
       );
     });
@@ -141,7 +148,10 @@ module.exports = {
   },
 
   // create a note in a particular class via its class_code
-  createNotes: ({ class_code }, { attachment_id, google_token }) => {
+  createNotes: (
+    { class_code },
+    { title, description, attachment_id, google_token }
+  ) => {
     return new Promise(async (resolve, reject) => {
       //  checking if notes is being created by the owner
       let checkSql =
@@ -166,10 +176,10 @@ module.exports = {
             });
           }
 
-          let sql = `INSERT INTO notes (attachment_id, posted_on, class_code) VALUES (?, current_timestamp(), ?)`;
+          let sql = `INSERT INTO notes (title, description, attachment_id, posted_on, class_code) VALUES (?, ?, ?, current_timestamp(), ?)`;
           await pool.query(
             sql,
-            [attachment_id, class_code],
+            [title, description, attachment_id, class_code],
             (error, result, field) => {
               if (error) {
                 return reject({

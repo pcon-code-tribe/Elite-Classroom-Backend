@@ -1,7 +1,7 @@
 const pool = require('../../config/database');
 
 module.exports = {
-  createUser: ({ name, email, google_token }) => {
+  createUser: ({ name, email, profile_pic, google_token }) => {
     return new Promise(async (resolve, reject) => {
       let sqlSearch = 'SELECT * FROM users WHERE google_token = ?'; //  checking if the user already exists
 
@@ -25,10 +25,10 @@ module.exports = {
 
           if (result.length === 0) {
             let sqlInsert =
-              'INSERT INTO users (name, email, google_token) VALUES (?,?,?)';
+              'INSERT INTO users (name, email, profile_pic, google_token) VALUES (?,?,?)';
             await pool.query(
               sqlInsert,
-              [name, email, google_token],
+              [name, email, profile_pic, google_token],
               (error, results, fields) => {
                 if (error) {
                   return reject({

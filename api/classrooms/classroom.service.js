@@ -150,7 +150,7 @@ module.exports = {
           }
 
           let participantSql =
-            'SELECT classes.user_id, classes.joined_on, users.name FROM classes JOIN users ON (users.user_id = classes.user_id) WHERE classes.class_code = ?';
+            'SELECT classes.user_id, classes.joined_on, users.name, users.profile_pic FROM classes JOIN users ON (users.user_id = classes.user_id) WHERE classes.class_code = ?';
 
           await pool.query(
             participantSql,
