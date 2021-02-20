@@ -1,5 +1,6 @@
 const {submitWork}= require("./create.services");
-const {uploadWork,checkUser,checkWork}= require('../work.services');
+const {checkUser,checkWork}= require('../work.services');
+const {uploadWork} = require('../work.services.v2');
 
 module.exports = {
     submit: async (req, res) =>{

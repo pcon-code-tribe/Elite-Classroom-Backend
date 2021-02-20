@@ -1,5 +1,6 @@
 const {read_from_db} = require('./services');
 const {checkUser,checkWork} = require("../work.services");
+const {uploadWork,downloadWork} = require("../work.services.v2");
 
 module.exports = {
     submission : async (req, res) =>{
@@ -76,6 +77,17 @@ module.exports = {
                         }
                     });
                 }
+            }
+        });
+    },
+    download: async (req, res) => {
+        // console.log(req.body.url.split('/')[4]);
+        downloadWork(req.query.url.split('/')[4],(err,info)=>{
+            if(err){
+                console.log(err);
+                res.json(err);
+            }else{
+                res.json(info);
             }
         });
     },

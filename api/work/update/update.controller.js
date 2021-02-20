@@ -1,5 +1,6 @@
-const {uploadWork,checkUser,checkWork} = require('../work.services');
+const {checkUser,checkWork} = require('../work.services');
 const {update} = require('./update.sercives');
+const {uploadWork} = require('../work.services.v2');
 
 module.exports = {
     update: async (req, res) =>{

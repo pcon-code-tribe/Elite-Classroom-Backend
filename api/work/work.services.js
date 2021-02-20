@@ -36,7 +36,7 @@ module.exports = {
         const s3obj = myUrl[myUrl.length - 1];
 
         const params = {
-            Bucket:process.env.AWS_BUCKET_NAME,
+            Bucket:process.env.S3_BUCKET_NAME,
             Key:s3obj,
         };
         s3.deleteObject(params,(err, data)=>{
@@ -49,7 +49,7 @@ module.exports = {
         });
     },
     checkUser:(uid,callback)=>{
-        
+
         var sql = "SELECT * FROM users WHERE user_id = ?";
         pool.query(sql,[uid],(err,result,fields)=>{
             if(err){

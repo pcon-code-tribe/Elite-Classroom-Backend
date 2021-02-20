@@ -1,4 +1,9 @@
 .env
 node_modules
 uploads
+public_chats
+serviceAccountKey2.json
+chat/record.txt
+chat/read.json
 package-lock.json
+messages.json
