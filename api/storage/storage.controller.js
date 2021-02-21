@@ -35,7 +35,7 @@ module.exports = {
                     if(info == null){
                         res.status(500).send('not sure for deletion');
                     }else{
-                        res.send(200);
+                        res.sendStatus(200);
                     }
                 }
             });
