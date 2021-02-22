@@ -6,7 +6,14 @@ fs.open('chat/read.json','r',(err,file)=>{
       if(err){
         console.log(err);
       }else{
-        console.log("file created and now reading!!");
+        const content ={};
+        fs.writeFile('./chat/read.json',JSON.stringify(content),err=>{
+          if(err){
+            console.log(err);
+          }else{
+            console.log('reading messages now!!');
+          }
+        })
       }
     });
   }else{
