@@ -10,7 +10,7 @@ var users = new Map();
 
 module.exports = function(io){
   const route = express.Router();
-  console.log("chat");
+  // console.log("chat");
 
 
 
@@ -20,7 +20,7 @@ module.exports = function(io){
     //sending and storing messages
     socket.on('sendMsg',(data)=>{
       const room = data.class_id;
-      console.log(data);
+      // console.log(data);
       writeRecord(data,err=>{
         if(err){
           socket.send("error while sending message");

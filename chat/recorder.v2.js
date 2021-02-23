@@ -40,6 +40,7 @@ module.exports = {
          try{
            var newMsg = JSON.parse(oldMsg);
            if(newMsg[`${room}`] === undefined){
+             data["id"]=msgID;
              newMsg[`${room}`] = [JSON.stringify(data)];
            }else{
              var currRoomMsg = newMsg[`${room}`];
