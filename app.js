@@ -14,10 +14,10 @@ const server = app.listen(PORT, () => {
   console.log('Server up and running on ', PORT);
 }); //  returns http object
 
-const io = socketIO(server, {
-  cors: {
-    origin: '*',
-  },
-});
+// const io = socketIO(server, {
+//   cors: {
+//     origin: '*',
+//   },
+// });
 
-io.on('connection', socketIOHandler(io));
+// io.on('connection', socketIOHandler(io));
