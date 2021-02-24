@@ -7,16 +7,7 @@ module.exports={
 
         return new Promise (async (resolve, reject) =>{
             
-            let sqlSearch = `SELECT ${day} FROM main_schedule WHERE class_code= '${classCode}'`;
-            await pool.query(sqlSearch, async(err, result, field) =>{
-            
-                if(err){
-                    return reject({
-                        status: 500,
-                        error: err
-                    });
-                }
-           
+        
                     let sqlInsert = `INSERT INTO main_schedule SET class_code='${classCode}', ${day} ='${time}' `;
 
                     await pool.query(sqlInsert, (err, result, field) =>{
@@ -30,8 +21,6 @@ module.exports={
                         //console.log(result);
                         return resolve(result);
                     });
-                return resolve(result);
-            });
         });
     },
 
@@ -59,19 +48,8 @@ module.exports={
         
         return new Promise (async (resolve, reject) =>{
 
-            let sqlSearch = `SELECT ${day} FROM main_schedule WHERE class_code='${classCode}'`;
-            await pool.query(sqlSearch, async(err, result, field) =>{
-            
-                if(err){
-                    return reject({
-                        status: 500,
-                        error: err
-                    });
-                }
 
-            if(result){
-
-                let sqlDelete = `UPDATE main_schedule SET ${day} = "" WHERE class_code= '${classCode}' `;
+                let sqlDelete = `UPDATE main_schedule SET ${day} = "" WHERE class_code= '${classCode}' AND ${day}= '${time}' `;
                 await pool.query(sqlDelete, [classCode], (err, result, field) =>{
 
                     if(err){
@@ -83,27 +61,14 @@ module.exports={
 
                     return resolve(result);
                 });
-            }
-            return resolve(result);
-        });
-    })
+    
+        })
     },
 
     updateClass_routine: ({classCode, day, old_time, new_time}) => {
 
         return new Promise (async (resolve, reject) =>{
 
-            let sqlSearch = `SELECT ${day} FROM main_schedule WHERE class_code= '${classCode}'`;
-            await pool.query(sqlSearch, async(err, result, field) =>{
-            
-                if(err){
-                    return reject({
-                        status: 500,
-                        error: err
-                    });
-                }
-
-                if(result){
            
                     let sqlInsert = `UPDATE main_schedule SET ${day} = '${new_time}' WHERE class_code= '${classCode}' AND ${day} = '${old_time}' `;
 
@@ -118,9 +83,6 @@ module.exports={
 
                         return resolve(result);
                     });
-                    return resolve(result);
-                }
-            });
         });
     },
 };
