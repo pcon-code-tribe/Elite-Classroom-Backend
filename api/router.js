@@ -6,7 +6,11 @@ router.use('/classrooms', require('./classrooms/classroom.router'));
 router.use('/todo', require('./todos/todo.router'));
 
 router.use('/getClasses', require('./getClasses/getClasses.router'));
-router.use('/thisWeek-calender', require('./calender/thisWeek.router'));
-router.use('/everyWeek-calender', require('./calender/everyWeek.router'));
+router.use('/calender', require('./calender/comingWeeks.router'));
+router.use('/routineWeek-calender', require('./calender/routine.router'));
+router.use('/weekly-calender', require('./calender/getCalender.router'));
 
 module.exports = router;
+
+
+

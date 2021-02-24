@@ -1,11 +1,11 @@
-const { addClass_everyWeek, getSchedule_everyWeek, deleteClass_everyWeek, updateClass_everyWeek } = require('./everyWeek.service');
+const { addClass_routine, getSchedule_routine, deleteClass_routine, updateClass_routine } = require('./routine.service');
 
 
 module.exports = {
 
-    scheduleClass_everyWeek: (req, res) =>{
+    scheduleClass_routine: (req, res) =>{
 
-        addClass_everyWeek(req.body).then((result) =>{
+        addClass_routine(req.body).then((result) =>{
 
             if(!result){
 
@@ -29,9 +29,9 @@ module.exports = {
         });
     },
 
-    getCalender_everyWeek:(req, res) =>{
+    getCalender_routine:(req, res) =>{
 
-        getSchedule_everyWeek(req.body).then((result) => {
+        getSchedule_routine(req.params).then((result) => {
 
             if(!result){
                 res.status=500;
@@ -51,9 +51,9 @@ module.exports = {
         });
     },
 
-    cancelClass_everyWeek:(req, res) =>{
+    cancelClass_routine:(req, res) =>{
 
-        deleteClass_everyWeek(req.body).then((result) =>{
+        deleteClass_routine(req.body).then((result) =>{
             
 
             if(!result){
@@ -76,9 +76,9 @@ module.exports = {
         });
     },
 
-    rescheduleClass_everyWeek:(req, res) =>{
+    rescheduleClass_routine:(req, res) =>{
 
-        updateClass_everyWeek(req.body).then((result) =>{
+        updateClass_routine(req.body).then((result) =>{
             
 
             if(!result){

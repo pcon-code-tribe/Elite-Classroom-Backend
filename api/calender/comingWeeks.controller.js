@@ -1,11 +1,11 @@
-const { addClass_thisWeek, getSchedule_thisWeek, deleteClass_thisWeek, updateClass_thisWeek } = require('./thisWeek.service');
+const { addClass, deleteClass, updateClass } = require('./comingWeeks.service');
 
 
 module.exports = {
 
-    scheduleClass_thisWeek: (req, res) =>{
+    scheduleClass: (req, res) =>{
 
-        addClass_thisWeek(req.body).then((result) =>{
+        addClass(req.body).then((result) =>{
 
             if(!result){
 
@@ -15,6 +15,15 @@ module.exports = {
                     message: "Error in scheduling extra class"
                 });
             }
+                console.log(result);
+                //if(result.changedRows === 0)
+                //{
+                //    res.status=200;
+                //    res.json({
+                //        success: 0,
+                //        message: "A class at this time already exists!"
+                //    });
+                //}
 
                 res.status=200;
                 res.json({
@@ -29,31 +38,9 @@ module.exports = {
         });
     },
 
-    getCalender_thisWeek:(req, res) =>{
+    cancelClass:(req, res) =>{
 
-        getSchedule_thisWeek(req.body).then((result) => {
-
-            if(!result){
-                res.status=500;
-                res.json({
-                    success:0,
-                    message: "Error in fetching Calender"
-                });
-            }
-
-            res.status=200;
-            res.send(result);
-        })
-        .catch((e) =>{
-            res.status(e.status);
-            res.send(e);
-            res.end();
-        });
-    },
-
-    cancelClass_thisWeek:(req, res) =>{
-
-        deleteClass_thisWeek(req.body).then((result) =>{
+        deleteClass(req.body).then((result) =>{
             
 
             if(!result){
@@ -63,6 +50,16 @@ module.exports = {
                     message: "Error in cancelling class"
                 });
             }
+            
+            console.log(result);
+            //if(result.changededRows === 0)
+            //{
+            //    res.status=200;
+            //    res.json({
+            //        success: 0,
+            //        message: "No such class exists!"
+            //    });
+            //}
             res.status=200;
             res.json({
                 success: 1,
@@ -76,9 +73,9 @@ module.exports = {
         });
     },
 
-    rescheduleClass_thisWeek:(req, res) =>{
+    rescheduleClass:(req, res) =>{
 
-        updateClass_thisWeek(req.body).then((result) =>{
+        updateClass(req.body).then((result) =>{
             
 
             if(!result){
