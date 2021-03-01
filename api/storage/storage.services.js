@@ -5,7 +5,7 @@ const {format} = require('util');
 
 const storage = new Storage({
     projectId: "elite-classroom-cdae0",
-    keyFilename: "serviceAccountKey2.json"
+    keyFilename: "serviceAccountKey.json"
 });
 
 const bucket = storage.bucket("gs://elite-classroom-cdae0.appspot.com");
@@ -30,8 +30,8 @@ const uploadImageToCloud = (file)=>{
       
         blobStream.on('finish', () => {
         // The public URL can be used to directly access the file via HTTP.
-        const url = format(`https://storage.googleapis.com/${bucket.name}/${uploadTask.name}`);
-        resolve(url);
+        const Location = format(`https://storage.googleapis.com/${bucket.name}/${uploadTask.name}`);
+        resolve({Location});
         });
       
         blobStream.end(file.buffer);
