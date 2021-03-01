@@ -1,9 +1,14 @@
 const {uploadWork,downloadWork,deleteWork} = require('./storage.services');
+const {v4} = require('uuid');
+const path = require('path');
+const fs = require('fs');
 
 module.exports = {
      upload: async(req,res) =>{
          const file =  req.file;
          if(file != null){
+
+            // console.log(file);
 
              uploadWork(file,(err,info) =>{
                  if(err){
@@ -57,7 +62,19 @@ module.exports = {
                     if(info == null){
                         res.status(500).send('unable to fetch data');
                     }else{
-                        res.send(info)
+                        res.download(info.destination,`${v4()}.${info.extension}`,(err)=>{
+                            if(err){
+                                console.log(err);
+                                res.status(500).send(err.message);
+                            }
+                            
+                            fs.unlink(path.join(__dirname,`../../${info.destination}`),(err)=>{
+                                if(err){
+                                    console.log(err);
+                                }
+                            });
+
+                        });
                     }
                 }
             });

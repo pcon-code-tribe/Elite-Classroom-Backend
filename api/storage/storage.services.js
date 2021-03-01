@@ -2,6 +2,7 @@ const pool = require('../../config/database');
 const {Storage} = require('@google-cloud/storage');
 const {v4} = require('uuid');
 const {format} = require('util');
+const mime = require('mime-types');
 
 const storage = new Storage({
     projectId: "elite-classroom-cdae0",
@@ -17,6 +18,8 @@ const uploadImageToCloud = (file)=>{
         let newFileName= `${v4()}.${name[name.length -1]}`;
         let uploadTask = bucket.file(newFileName);
 
+        console.log(file.mimetype);
+
         const blobStream = uploadTask.createWriteStream({
             metadata:{
                 contentType: file.mimetype
@@ -29,7 +32,6 @@ const uploadImageToCloud = (file)=>{
           });
       
         blobStream.on('finish', () => {
-        // The public URL can be used to directly access the file via HTTP.
         const Location = format(`https://storage.googleapis.com/${bucket.name}/${uploadTask.name}`);
         resolve({Location});
         });
@@ -46,14 +48,17 @@ const downloadFromCloud =  (name)=>{
         let downloadTask = bucket.file(name);
 
         try{
-            const file = await downloadTask.download();
-            resolve(file);
+            const extension =  name.split('.')[1];
+            const destination = `./temp_downloads/${v4()}.${extension}`;
+            const options = {destination}
+            const file = await downloadTask.download(options);
+            resolve({destination,extension});
         }catch(e){
             console.log(e);
             reject(e);
         }
 
-    })
+    });
 }
 
 const deleteFromCloud = (name)=>{
