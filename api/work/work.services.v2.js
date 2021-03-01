@@ -5,7 +5,7 @@ const {format} = require('util');
 
 const storage = new Storage({
     projectId: "elite-classroom-cdae0",
-    keyFilename: "serviceAccountKey2.json"
+    keyFilename: "serviceAccountKey.json"
 });
 
 const bucket = storage.bucket("gs://elite-classroom-cdae0.appspot.com");
@@ -68,7 +68,7 @@ const deleteFromCloud = (name)=>{
         
         try{
             const data = await deleteTask.delete();
-            console.log(data);
+            // console.log(data);
             resolve(data);
         }catch(e){
             console.log(e);
@@ -80,7 +80,7 @@ const deleteFromCloud = (name)=>{
 module.exports = {
     uploadWork:(file,callback)=>{
         uploadImageToCloud(file).then(data=>{
-            console.log(data);
+            // console.log(data);
             return callback(null, data);
         }).catch(err=>{
             console.log(err);

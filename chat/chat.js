@@ -90,7 +90,7 @@ module.exports = function(io){
       connections.delete(socket.client.id);
       // console.log(connections);
       console.log("a user disconnected");
-    })
+    });
 
   });
 
