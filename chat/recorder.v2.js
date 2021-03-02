@@ -72,17 +72,20 @@ module.exports = {
         const roomMsg = messages[`${room_id}`];
         let dataTosend = [];
 
+        if(!roomMsg)
+        return callback(null,[]);
+
         try{
           roomMsg.forEach((item, i) => {
             dataTosend.push(JSON.parse(item));
           });
           return callback(null,dataTosend);
         }catch(e){
-          console.log(err);
-          return callback(err);
+          console.log(e);
+          return callback(e);
         }
 
-        return callback(null,roomMsg);
+        // return callback(null,roomMsg);
       }
     });
 

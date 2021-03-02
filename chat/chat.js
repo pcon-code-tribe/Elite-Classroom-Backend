@@ -48,7 +48,9 @@ module.exports = function(io){
           // console.log(err);
           socket.emit('error',err);
         }else{
-          // console.log(info);
+          if (!info) {
+            info = [];
+          }
           socket.emit('allMsg',info);
         }
       });
