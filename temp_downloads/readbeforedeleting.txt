@@ -1,1 +1,1 @@
-this folder is meant for storing files temporarily on the backend when user requests to download them from google cloud because the url we provide is accisible publicly.
+this folder is meant for storing files temporarily on the backend when user requests to download them from google cloud because the url we provide is not accisible publicly.
