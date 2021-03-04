@@ -6,7 +6,7 @@ const mime = require('mime-types');
 
 const storage = new Storage({
     projectId: "elite-classroom-cdae0",
-    keyFilename: "serviceAccountKey.json"
+    keyFilename: "serviceAccount.json"
 });
 
 const bucket = storage.bucket("gs://elite-classroom-cdae0.appspot.com");
