@@ -25,7 +25,7 @@ module.exports = {
   //sets the info for a msg who read it
   setMsgInfo:(info,callback)=>{
     let {id,user_id,user_name} =  info;
-    console.log(id);
+    // console.log(id);
 
     fs.readFile('chat/read.json',(err,data)=>{
 

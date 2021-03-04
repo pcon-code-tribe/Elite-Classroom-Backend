@@ -10,7 +10,7 @@ var users = new Map();
 
 module.exports = function(io){
   const route = express.Router();
-  console.log("chat");
+  // console.log("chat");
 
 
 
@@ -20,7 +20,7 @@ module.exports = function(io){
     //sending and storing messages
     socket.on('sendMsg',(data)=>{
       const room = data.class_id;
-      console.log(data);
+      // console.log(data);
       writeRecord(data,err=>{
         if(err){
           socket.send("error while sending message");
@@ -48,7 +48,9 @@ module.exports = function(io){
           // console.log(err);
           socket.emit('error',err);
         }else{
-          // console.log(info);
+          if (!info) {
+            info = [];
+          }
           socket.emit('allMsg',info);
         }
       });
@@ -90,7 +92,7 @@ module.exports = function(io){
       connections.delete(socket.client.id);
       // console.log(connections);
       console.log("a user disconnected");
-    })
+    });
 
   });
 

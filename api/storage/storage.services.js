@@ -2,10 +2,11 @@ const pool = require('../../config/database');
 const {Storage} = require('@google-cloud/storage');
 const {v4} = require('uuid');
 const {format} = require('util');
+const mime = require('mime-types');
 
 const storage = new Storage({
     projectId: "elite-classroom-cdae0",
-    keyFilename: "serviceAccountKey2.json"
+    keyFilename: "serviceAccount.json"
 });
 
 const bucket = storage.bucket("gs://elite-classroom-cdae0.appspot.com");
@@ -16,6 +17,8 @@ const uploadImageToCloud = (file)=>{
         const name = file.originalname.split('.');
         let newFileName= `${v4()}.${name[name.length -1]}`;
         let uploadTask = bucket.file(newFileName);
+
+        console.log(file.mimetype);
 
         const blobStream = uploadTask.createWriteStream({
             metadata:{
@@ -29,9 +32,8 @@ const uploadImageToCloud = (file)=>{
           });
       
         blobStream.on('finish', () => {
-        // The public URL can be used to directly access the file via HTTP.
-        const url = format(`https://storage.googleapis.com/${bucket.name}/${uploadTask.name}`);
-        resolve(url);
+        const Location = format(`https://storage.googleapis.com/${bucket.name}/${uploadTask.name}`);
+        resolve({Location});
         });
       
         blobStream.end(file.buffer);
@@ -46,14 +48,17 @@ const downloadFromCloud =  (name)=>{
         let downloadTask = bucket.file(name);
 
         try{
-            const file = await downloadTask.download();
-            resolve(file);
+            const extension =  name.split('.')[1];
+            const destination = `./temp_downloads/${v4()}.${extension}`;
+            const options = {destination}
+            const file = await downloadTask.download(options);
+            resolve({destination,extension});
         }catch(e){
             console.log(e);
             reject(e);
         }
 
-    })
+    });
 }
 
 const deleteFromCloud = (name)=>{
