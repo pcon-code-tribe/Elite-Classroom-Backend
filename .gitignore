@@ -7,3 +7,5 @@ chat/read.json
 package-lock.json
 messages.json
 serviceAccount.json
+serviceAccountKey.json
+serviceAccountKey2.json
