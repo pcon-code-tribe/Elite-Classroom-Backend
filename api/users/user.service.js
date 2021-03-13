@@ -1,38 +1,51 @@
-const pool =  require("../../config/database");
+const pool = require('../../config/database');
 
+module.exports = {
+	createUser: ({ name, email, profile_pic, google_token }) => {
+		return new Promise(async (resolve, reject) => {
+			let sqlSearch = 'SELECT * FROM users WHERE google_token = ?'; //  checking if the user already exists
 
-  module.exports = {
+			await pool.query(
+				sqlSearch,
+				[google_token],
+				async (error, result, field) => {
+					if (!google_token) {
+						return reject({
+							status: 422,
+							error: 'Token can not be undefined',
+						});
+					}
 
-    createUser : (data , callback) => {
+					if (error) {
+						return reject({
+							status: 500,
+							error,
+						});
+					}
 
-      pool.query("Select * FROM users WHERE google_token = '"+ data.google_token +"'",
-       (err, result, field) => {
-        if(result.length === 0){
+					if (result.length === 0) {
+						let sqlInsert =
+							'INSERT INTO users (name, email, profile_pic, google_token) VALUES (?,?,?,?)';
+						await pool.query(
+							sqlInsert,
+							[name, email, profile_pic, google_token],
+							(error, results, fields) => {
+								if (error) {
+									return reject({
+										status: 500,
+										message: 'Insertion to database failed',
+										error,
+									});
+								}
 
-          pool.query("INSERT INTO users (name, email, google_token) VALUES (?,?,?)",
-          [
-             data.name,
-             data.email,
-             data.google_token
-          ]
-          ,
-          (error,results,fields) => {
-              if(error){
-                  return callback(error);
-              }
-  
-              return callback(null,results);
-          }
-          
-          );
-  
-          
-       }else{  
-              return callback(null,result);
-          }
-       
-    }
-      )
-  }
-
+								return resolve(results);
+							}
+						);
+					} else {
+						return resolve(result);
+					}
+				}
+			);
+		});
+	},
 };

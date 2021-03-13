@@ -1,26 +1,25 @@
-require("dotenv").config();
-const express = require("express");
-const mysql = require("mysql");
+require('dotenv').config();
+const express = require('express');
+const http = require('http');
+const socketIO = require('socket.io');
 const app = express();
-const routes = require("./api/router");
-const PORT = process.env.PORT || 4000;
-app.use(express.json());
+const routes = require('./api/router');
+const socketIOHandler = require('./chat/chat');
+const PORT = process.env.PORT || 3300;
+const server = http.createServer(app);
 
-
-
-const pool = require("./config/database");
-app.use("/api", routes);
-
-
-
-
-console.log('process.env');
-
-
-
-
-
-
-app.listen(PORT, () => {
-    console.log("Server up and running on ", PORT);
+const io = socketIO(server, {
+  cors: {
+    origin: '*',
+  },
 });
+
+app.use(express.json());
+app.use('/api', routes);
+
+server.listen(PORT, () => {
+  console.log('Server up and running on ', PORT);
+  app.use(socketIOHandler(io));
+}); //  returns http object
+
+

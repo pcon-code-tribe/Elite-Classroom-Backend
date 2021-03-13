@@ -1,4 +1,9 @@
-const { getClasswork, updatework, deletework, creatework } = require('./classwork.service');
+const {
+    getClasswork,
+    updateClasswork,
+    deleteClasswork,
+    createClasswork,
+} = require('./classwork.service');
 
 module.exports = {
     get: (req, res) => {
@@ -23,7 +28,7 @@ module.exports = {
     },
 
     update: (req, res) => {
-        updatework(req.body, req.params)
+        updateClasswork(req.params, req.body)
             .then((result) => {
                 if (!result) {
                     res.status(500);
@@ -44,7 +49,7 @@ module.exports = {
     },
 
     del: (req, res) => {
-        deletework(req.params)
+        deleteClasswork(req.params, req.body)
             .then((result) => {
                 if (!result) {
                     res.status(500);
@@ -65,7 +70,7 @@ module.exports = {
     },
 
     create: (req, res) => {
-        creatework(req.body)
+        createClasswork(req.body)
             .then((result) => {
                 if (!result) {
                     res.status(500);
@@ -84,5 +89,4 @@ module.exports = {
                 res.end();
             });
     },
-
 };
