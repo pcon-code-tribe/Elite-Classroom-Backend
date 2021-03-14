@@ -1,4 +1,5 @@
 const {
+    getworkById,
     getClasswork,
     updateClasswork,
     deleteClasswork,
@@ -6,6 +7,28 @@ const {
 } = require('./classwork.service');
 
 module.exports = {
+    //getting work by work id
+    getId: (req, res) => {
+        getworkById(req.params)
+            .then((result) => {
+                if (!result) {
+                    res.status(500);
+                    return res.json({
+                        success: 0,
+                        message: 'Error occurred while getting work',
+                    });
+                } else {
+                    res.status(200);
+                    return res.json(result);
+                }
+            })
+            .catch((e) => {
+                res.status(e.status);
+                res.send(e);
+                res.end();
+            });
+    },
+    //getting work of a classcode
     get: (req, res) => {
         getClasswork(req.params)
             .then((result) => {
