@@ -5,6 +5,7 @@ module.exports = {
 
     scheduleClass: (req, res) =>{
 
+        //takes class code, date and time of class which needs to be inserted from req.body
         addClass(req.body).then((result) =>{
 
             if(!result){
@@ -15,7 +16,7 @@ module.exports = {
                     message: "Error in scheduling extra class"
                 });
             }
-                console.log(result);
+                //console.log(result);
                 //if(result.changedRows === 0)
                 //{
                 //    res.status=200;
@@ -40,6 +41,7 @@ module.exports = {
 
     cancelClass:(req, res) =>{
 
+        //takes class code, date and time of class which needs to be deleted from req.body
         deleteClass(req.body).then((result) =>{
             
 
@@ -51,7 +53,7 @@ module.exports = {
                 });
             }
             
-            console.log(result);
+            //console.log(result);
             //if(result.changededRows === 0)
             //{
             //    res.status=200;
@@ -75,6 +77,7 @@ module.exports = {
 
     rescheduleClass:(req, res) =>{
 
+        //takes class code, date, old and new time of class which needs to be updated from req.body
         updateClass(req.body).then((result) =>{
             
 
