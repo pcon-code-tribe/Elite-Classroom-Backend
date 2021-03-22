@@ -9,17 +9,15 @@ const PORT = process.env.PORT || 3300;
 const server = http.createServer(app);
 
 const io = socketIO(server, {
-  cors: {
-    origin: '*',
-  },
+    cors: {
+        origin: '*',
+    },
 });
 
 app.use(express.json());
 app.use('/api', routes);
 
 server.listen(PORT, () => {
-  console.log('Server up and running on ', PORT);
-  app.use(socketIOHandler(io));
+    console.log('Server up and running on ', PORT);
+    app.use(socketIOHandler(io));
 }); //  returns http object
-
-
