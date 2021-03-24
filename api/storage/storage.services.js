@@ -18,7 +18,7 @@ const uploadImageToCloud = (file)=>{
         let newFileName= `${v4()}.${name[name.length -1]}`;
         let uploadTask = bucket.file(newFileName);
 
-        console.log(file.mimetype);
+        // console.log(file.mimetype);
 
         const blobStream = uploadTask.createWriteStream({
             metadata:{
