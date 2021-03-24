@@ -69,7 +69,7 @@ function getWeekDay(dt) {
 
 module.exports={
 
-    addClass: ({classCode, date, time}) => {
+    addClass: ({classCode, date, time, description, classLink}) => {
 
         //gets the week number of the date entered by the user
         let week = getWeekNum(date);
@@ -79,7 +79,8 @@ module.exports={
         return new Promise (async (resolve, reject) =>{
 
             //inserts the class time on the day of the date entered and the week of the date entered into the table
-            let sqlInsert = `INSERT INTO current_schedule SET class_code= '${classCode}', week_no= '${week}', ${week_day} = '${time}'`;
+            let sqlInsert = `INSERT INTO current_schedule SET class_code= '${classCode}', week_no= '${week}',
+             ${week_day} = '${time}', description='${description}', class_link='${classLink}'`;
 
                 await pool.query(sqlInsert, (err, result, field) =>{
 
@@ -121,19 +122,33 @@ module.exports={
         });
     },
 
-    updateClass: ({classCode, date, old_time, new_time}) => {
+    updateClass: ({classCode, date, old_time, new_time, description, classLink}) => {
 
         //gets the week number of the date entered by the user
         let week = getWeekNum(date);
         //gets the week day of the date entered by the user
         let week_day = getWeekDay(date);
+        
+        let des = JSON.parse(JSON.stringify(description));
+        let link = JSON.parse(JSON.stringify(classLink));
+        //console.log(link);
     
         return new Promise (async (resolve, reject) =>{
            
-            //updates the class time from old to new on the day of the date entered and the week of the date entered into the table
-                let sqlUpdate = `UPDATE current_schedule SET ${week_day}= '${new_time}' WHERE class_code= '${classCode}' AND week_no= '${week}' AND ${week_day}= '${old_time}'`;
+            let sqlUpdate;
+            //if new time is "", owner wants to update either description or class link or both
+            if(new_time === ""){
+                sqlUpdate = `UPDATE current_schedule SET description = COALESCE(? , description),
+                class_link = COALESCE(? , class_link) WHERE class_code= '${classCode}' AND week_no= '${week}' AND ${week_day}= '${old_time}'`;
+            }else{
+                //if new time is entered the owner wants to update time as well
+                sqlUpdate = `UPDATE current_schedule SET ${week_day}= '${new_time}', 
+                description = COALESCE(? , description),
+                class_link = COALESCE(? , class_link) WHERE class_code= '${classCode}' AND week_no= '${week}' AND ${week_day}= '${old_time}'`;
+            }
+            
 
-                await pool.query(sqlUpdate, (err, result, field) =>{
+                await pool.query(sqlUpdate, [des, link], (err, result, field) =>{
 
                     if(err){
                         return reject({
