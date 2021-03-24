@@ -45,7 +45,6 @@ module.exports = {
     },
     user: async (req, res)=>{
         const sql = "SELECT * FROM work_submission WHERE work_id = ? AND user_id = ?";
-        const param =[req.params.workid, req.params.uid];
         checkUser(req.params.uid,(err,info)=>{
             if(err){
                 console.log(err);
@@ -56,6 +55,7 @@ module.exports = {
                 }else{
                     //user exists
                     //lets check for work
+                    const param =[req.params.workid, info[0].user_id];
                     checkWork(req.params.workid,(err,info)=>{
                         if(err){
                             console.log(err);

@@ -55,7 +55,7 @@ module.exports = {
             if(err){
                 return callback(err);
             }else{
-                console.log(result[0].user_id);
+                // console.log(result[0].user_id);
                 return callback(null,result);
             }
         })
