@@ -16,11 +16,4 @@ const uploads =multer(storage).single('file');
 
 router.post('/:uid/:wid/:sid',uploads,update);
 
-router.get('/check',(req,res)=>{
-    var sql = "SELECT * FROM work_submission";
-    pool.query(sql,(err,result,fields)=>{
-        res.json(result);
-    })
-})
-
 module.exports = router;
