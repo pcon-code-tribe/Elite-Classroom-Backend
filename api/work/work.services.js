@@ -50,11 +50,12 @@ module.exports = {
     },
     checkUser:(uid,callback)=>{
 
-        var sql = "SELECT * FROM users WHERE user_id = ?";
+        var sql = "SELECT * FROM users WHERE google_token = ?";
         pool.query(sql,[uid],(err,result,fields)=>{
             if(err){
                 return callback(err);
             }else{
+                console.log(result[0].user_id);
                 return callback(null,result);
             }
         })

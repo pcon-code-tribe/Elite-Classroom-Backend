@@ -9,7 +9,7 @@ const s3 = new AWS.S3({
 
 module.exports = {
     submitWork:(data, callback)=>{
-        const sql = "INSERT INTO work_submission (user_id,work_id,work,attachment,submitted_on) VALUES (?,?,?,?,?)";
+        const sql = "INSERT INTO work_submission (user_id,work_id,work,attachment,submitted_on) VALUES ((SELECT users.user_id FROM users WHERE users.google_token = ?),?,?,?,?)";
          pool.query(sql,[data.user_id,data.work_id,data.work,data.attachment,data.submitted_on],(err,result,fields)=>{
              if(err){
                  return callback(err);
