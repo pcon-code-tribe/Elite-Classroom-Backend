@@ -6,7 +6,7 @@ const mime = require('mime-types');
 
 const storage = new Storage({
     projectId: "elite-classroom-cdae0",
-    keyFilename: "serviceAccount.json"
+    keyFilename: "serviceAccountKey.json"
 });
 
 const bucket = storage.bucket("gs://elite-classroom-cdae0.appspot.com");
@@ -18,7 +18,7 @@ const uploadImageToCloud = (file)=>{
         let newFileName= `${v4()}.${name[name.length -1]}`;
         let uploadTask = bucket.file(newFileName);
 
-        console.log(file.mimetype);
+        // console.log(file.mimetype);
 
         const blobStream = uploadTask.createWriteStream({
             metadata:{

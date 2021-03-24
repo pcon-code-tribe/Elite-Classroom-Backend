@@ -16,6 +16,7 @@ module.exports = {
                     if(info.length == 0){
                         res.status(401).send("user not found");
                     }else{
+                        data.user_id = info[0].user_id;
                         checkWork(data.work_id,(err,info)=>{
                             if(err){
                                 console.log(err);

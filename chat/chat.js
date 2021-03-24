@@ -2,6 +2,7 @@ const socketIO = require('socket.io');
 const express = require('express');
 const {writeRecord,readRecord} = require('./recorder.v2');
 const {setMsgInfo,getMsgInfo} = require('./reader');
+const {findUserByToken} = require('./chat.services');
 
 //this stores the current room acquired by each connections
 var connections= new Map();
@@ -39,6 +40,19 @@ module.exports = function(io){
       users.set(user_id,socket);
       // console.log(users);
 
+      //here user_id id the google token from frontend
+      //get the user with that google token from the database
+      findUserByToken(user_id,(err,info)=>{
+        if(err){
+          socket.emit('error',`sorry! can't fetch user data try connecting again`);
+        }else{
+          socket.emit('user_data',{
+            name:info.name,
+            message:`Yeah! you end to end connected now!`
+          });
+          socket.join(`${room}`);
+        }
+      })
       //sets user info for each socket
       connections.set(socket.client.id,{user_id:user_id,room:room});
       // console.log(connections);
@@ -54,7 +68,6 @@ module.exports = function(io){
           socket.emit('allMsg',info);
         }
       });
-      socket.join(`${room}`);
     });
 
     //when user reads a message
