@@ -22,15 +22,18 @@ module.exports={
         return new Promise (async (resolve, reject) =>{
 
             //fetches last week's current as well as the routine calender of all the classes a user having the entered google_token is enrolled into
-            let sql = `SELECT * FROM current_schedule INNER JOIN classes ON 
-            current_schedule.class_code = classes.class_code
-            INNER JOIN users ON classes.user_id = users.user_id
-            WHERE users.google_token = '${google_token}' AND week_no = '${last_week}'
+            let sql = `SELECT cs.week_no, cs.sun, cs.mon, cs.tue, cs.wed, cs.thu, cs.fri, cs.sat, cs.class_code, cs.description, cs.class_link, cm.class_name FROM current_schedule cs INNER JOIN classes c ON 
+            cs.class_code = c.class_code
+            INNER JOIN users u ON c.user_id = u.user_id
+            INNER JOIN classroom cm ON cs.class_code = cm.class_code
+            WHERE u.google_token = '${google_token}' AND cs.week_no = '${last_week}'
             UNION
-            SELECT * FROM main_schedule INNER JOIN classes ON 
-            main_schedule.class_code = classes.class_code
-            INNER JOIN users ON classes.user_id = users.user_id
-            WHERE users.google_token = '${google_token}'`;
+            SELECT ms.schedule_id, ms.sun, ms.mon, ms.tue, ms.wed, ms.thu, ms.fri, ms.sat, ms.class_code, cm.description, cm.class_link, cm.class_name
+            FROM main_schedule ms INNER JOIN classes c ON 
+            ms.class_code = c.class_code
+            INNER JOIN users u ON c.user_id = u.user_id
+            INNER JOIN classroom cm ON ms.class_code = cm.class_code
+            WHERE u.google_token = '${google_token}'`;
 
             await pool.query(sql, (err, result, field) =>{
                 //console.log(this_week);
@@ -52,15 +55,18 @@ module.exports={
         return new Promise (async (resolve, reject) =>{
 
             //fetches this week's current as well as the routine calender of all the classes a user having the entered google_token is enrolled into
-            let sql = `SELECT * FROM current_schedule INNER JOIN classes ON 
-            current_schedule.class_code = classes.class_code
-            INNER JOIN users ON classes.user_id = users.user_id
-            WHERE users.google_token = '${google_token}' AND week_no = '${this_week}'
+            let sql = `SELECT cs.week_no, cs.sun, cs.mon, cs.tue, cs.wed, cs.thu, cs.fri, cs.sat, cs.class_code, cs.description, cs.class_link, cm.class_name FROM current_schedule cs INNER JOIN classes c ON 
+            cs.class_code = c.class_code
+            INNER JOIN users u ON c.user_id = u.user_id
+            INNER JOIN classroom cm ON cs.class_code = cm.class_code
+            WHERE u.google_token = '${google_token}' AND cs.week_no = '${this_week}'
             UNION
-            SELECT * FROM main_schedule INNER JOIN classes ON 
-            main_schedule.class_code = classes.class_code
-            INNER JOIN users ON classes.user_id = users.user_id
-            WHERE users.google_token = '${google_token}'`;
+            SELECT ms.schedule_id, ms.sun, ms.mon, ms.tue, ms.wed, ms.thu, ms.fri, ms.sat, ms.class_code, cm.description, cm.class_link, cm.class_name
+            FROM main_schedule ms INNER JOIN classes c ON 
+            ms.class_code = c.class_code
+            INNER JOIN users u ON c.user_id = u.user_id
+            INNER JOIN classroom cm ON ms.class_code = cm.class_code
+            WHERE u.google_token = '${google_token}'`;
 
             await pool.query(sql, (err, result, field) =>{
                 //console.log(this_week);
@@ -82,15 +88,18 @@ module.exports={
         return new Promise (async (resolve, reject) =>{
 
             //fetches next week's current as well as the routine calender of all the classes a user having the entered google_token is enrolled into
-            let sql = `SELECT * FROM current_schedule INNER JOIN classes ON 
-            current_schedule.class_code = classes.class_code
-            INNER JOIN users ON classes.user_id = users.user_id
-            WHERE users.google_token = '${google_token}' AND week_no = '${next_week}'
+            let sql = `SELECT cs.week_no, cs.sun, cs.mon, cs.tue, cs.wed, cs.thu, cs.fri, cs.sat, cs.class_code, cs.description, cs.class_link, cm.class_name FROM current_schedule cs INNER JOIN classes c ON 
+            cs.class_code = c.class_code
+            INNER JOIN users u ON c.user_id = u.user_id
+            INNER JOIN classroom cm ON cs.class_code = cm.class_code
+            WHERE u.google_token = '${google_token}' AND cs.week_no = '${next_week}'
             UNION
-            SELECT * FROM main_schedule INNER JOIN classes ON 
-            main_schedule.class_code = classes.class_code
-            INNER JOIN users ON classes.user_id = users.user_id
-            WHERE users.google_token = '${google_token}'`;
+            SELECT ms.schedule_id, ms.sun, ms.mon, ms.tue, ms.wed, ms.thu, ms.fri, ms.sat, ms.class_code, cm.description, cm.class_link, cm.class_name
+            FROM main_schedule ms INNER JOIN classes c ON 
+            ms.class_code = c.class_code
+            INNER JOIN users u ON c.user_id = u.user_id
+            INNER JOIN classroom cm ON ms.class_code = cm.class_code
+            WHERE u.google_token = '${google_token}'`;
 
             await pool.query(sql, (err, result, field) =>{
 
