@@ -57,7 +57,7 @@ module.exports = function(io){
       connections.set(socket.client.id,{user_id:user_id,room:room});
       // console.log(connections);
 
-      readRecord(room,(err,info)=>{
+      readRecord({room,user_id},(err,info)=>{
         if(err){
           // console.log(err);
           socket.emit('error',err);
