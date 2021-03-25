@@ -1,5 +1,6 @@
 const fs = require('fs');
 const {v4} = require('uuid');
+const { getMsgInfo } = require('./reader');
 
 //file to save messages on a json file
 fs.open('chat/messages.json','r',(err,file)=>{
@@ -61,7 +62,7 @@ module.exports = {
 
      });
   },
-  readRecord:(room_id,callback)=>{
+  readRecord:({room:room_id,user_id},callback)=>{
 
     fs.readFile('chat/messages.json',(err,jsonData)=>{
       if(err){
@@ -76,10 +77,25 @@ module.exports = {
         return callback(null,[]);
 
         try{
-          roomMsg.forEach((item, i) => {
-            dataTosend.push(JSON.parse(item));
+          getMsgInfo(null,(err,readInfo)=>{
+
+            if(err){
+              return callback(err);
+            }
+
+            roomMsg.forEach((item, i) => {
+              let eachMsg = JSON.parse(item);
+              if(readInfo[eachMsg.id] === undefined || readInfo[eachMsg.id][user_id] === undefined){
+                eachMsg.isRead = false;
+              }else{
+                eachMsg.isRead = readInfo[eachMsg.id][user_id];
+              }
+              dataTosend.push(eachMsg);
+            });
+            // console.log(dataTosend);
+            return callback(null,dataTosend);
+
           });
-          return callback(null,dataTosend);
         }catch(e){
           console.log(e);
           return callback(e);
