@@ -73,11 +73,11 @@ module.exports = {
         try{
 
           const allData = JSON.parse(data);
-          let readyData;
+          let readyData = [];
 
           if( id === null || id === undefined){
             readyData = allData;
-          }else{
+          }else if(allData[`${id}`] != undefined){
               let tosenddata = allData[`${id}`].readers;
               tosenddata.forEach(item=>{
                 readyData.push(JSON.parse(item));
