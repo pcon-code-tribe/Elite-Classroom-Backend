@@ -1,4 +1,5 @@
 const fs = require('fs');
+const {downloadWork} = require('../storage/storage.services');
 
 fs.open('api/themes/theme.json','r',(err,file)=>{
     if(err){
@@ -54,4 +55,40 @@ const recordTheme =  (url,cb)=>{
 
 }
 
-module.exports = {recordTheme};
+const readTheme = (cb)=>{
+
+    try{
+
+        fs.readFile('api/themes/theme.json',(err,info)=>{
+
+            const data = JSON.parse(info);
+            const num = Math.floor(data.themes.length * Math.random());
+
+            const name = data.themes[num].split('/')[4];
+
+            downloadWork(name,(err,dwnData)=>{
+
+                if(err){
+                    console.log(err);
+                    return cb(err);
+                }
+
+                if(dwnData === null  || dwnData === undefined){
+                    return cb({code:500,message:'unable to fetch file'});
+                }
+
+                return cb(null,dwnData);
+
+            });
+            
+        
+        });
+
+    }catch(err){
+        console.log(err);
+        return cb(err);
+    }
+
+}
+
+module.exports = {recordTheme,readTheme};
