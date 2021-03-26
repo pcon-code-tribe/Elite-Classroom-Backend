@@ -12,7 +12,7 @@ module.exports = {
 
             uploadWork(file,(err,info) =>{
                  if(err){
-                     throw err;
+                     res.status(500).json(err);
                  }else{
                      if(info != null ){
                          res.send(info);
