@@ -20,7 +20,7 @@ module.exports = {
         })
     },
     work: async (req, res) =>{
-        const sql = "SELECT * FROM work_submission WHERE work_id = ?";
+        const sql = "SELECT work_submission.*,users.name FROM work_submission JOIN users ON users.user_id=work_submission.user_id  WHERE  work_submission.work_id= ?;";
         const id = req.params.id;
         const param=[id];
         checkWork(id,(err,info) =>{
