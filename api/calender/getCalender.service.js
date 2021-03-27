@@ -67,13 +67,13 @@ module.exports={
             let last_week = getWeekNum() - 1;
 
             //fetches last week's current as well as the routine calender of all the classes a user having the entered google_token is enrolled into
-            let sql = `SELECT cs.week_no, cs.sun, cs.mon, cs.tue, cs.wed, cs.thu, cs.fri, cs.sat, cs.class_code, cs.description, cs.class_link, cm.class_name, cm.owner_id, u.profile_pic FROM current_schedule cs INNER JOIN classes c ON 
+            let sql = `SELECT cs.week_no, cs.sun, cs.mon, cs.tue, cs.wed, cs.thu, cs.fri, cs.sat, cs.class_code, cs.description, cs.class_link, cm.class_name, cm.owner_id, u.profile_pic, (SELECT google_token FROM users WHERE users.user_id=cm.owner_id) as owner_token FROM current_schedule cs INNER JOIN classes c ON 
             cs.class_code = c.class_code
             INNER JOIN users u ON c.user_id = u.user_id
             INNER JOIN classroom cm ON cs.class_code = cm.class_code
             WHERE u.google_token = '${google_token}' AND cs.week_no = '${last_week}'
             UNION
-            SELECT ms.schedule_id, ms.sun, ms.mon, ms.tue, ms.wed, ms.thu, ms.fri, ms.sat, ms.class_code, cm.description, cm.class_link, cm.class_name, cm.owner_id, u.profile_pic
+            SELECT ms.schedule_id, ms.sun, ms.mon, ms.tue, ms.wed, ms.thu, ms.fri, ms.sat, ms.class_code, cm.description, cm.class_link, cm.class_name, cm.owner_id, u.profile_pic, (SELECT google_token FROM users WHERE users.user_id=cm.owner_id) as owner_token
             FROM main_schedule ms INNER JOIN classes c ON 
             ms.class_code = c.class_code
             INNER JOIN users u ON c.user_id = u.user_id
@@ -102,13 +102,13 @@ module.exports={
             let this_week = getWeekNum();
 
             //fetches this week's current as well as the routine calender of all the classes a user having the entered google_token is enrolled into
-            let sql = `SELECT cs.week_no, cs.sun, cs.mon, cs.tue, cs.wed, cs.thu, cs.fri, cs.sat, cs.class_code, cs.description, cs.class_link, cm.class_name, cm.owner_id, u.profile_pic FROM current_schedule cs INNER JOIN classes c ON 
+            let sql = `SELECT cs.week_no, cs.sun, cs.mon, cs.tue, cs.wed, cs.thu, cs.fri, cs.sat, cs.class_code, cs.description, cs.class_link, cm.class_name, cm.owner_id, u.profile_pic, (SELECT google_token FROM users WHERE users.user_id=cm.owner_id) as owner_token FROM current_schedule cs INNER JOIN classes c ON 
             cs.class_code = c.class_code
             INNER JOIN users u ON c.user_id = u.user_id
             INNER JOIN classroom cm ON cs.class_code = cm.class_code
             WHERE u.google_token = '${google_token}' AND cs.week_no = '${this_week}'
             UNION
-            SELECT ms.schedule_id, ms.sun, ms.mon, ms.tue, ms.wed, ms.thu, ms.fri, ms.sat, ms.class_code, cm.description, cm.class_link, cm.class_name, cm.owner_id, u.profile_pic
+            SELECT ms.schedule_id, ms.sun, ms.mon, ms.tue, ms.wed, ms.thu, ms.fri, ms.sat, ms.class_code, cm.description, cm.class_link, cm.class_name, cm.owner_id, u.profile_pic, (SELECT google_token FROM users WHERE users.user_id=cm.owner_id) as owner_token
             FROM main_schedule ms INNER JOIN classes c ON 
             ms.class_code = c.class_code
             INNER JOIN users u ON c.user_id = u.user_id
@@ -137,13 +137,13 @@ module.exports={
             let next_week = getWeekNum() + 1;
 
             //fetches next week's current as well as the routine calender of all the classes a user having the entered google_token is enrolled into
-            let sql = `SELECT cs.week_no, cs.sun, cs.mon, cs.tue, cs.wed, cs.thu, cs.fri, cs.sat, cs.class_code, cs.description, cs.class_link, cm.class_name, cm.owner_id, u.profile_pic FROM current_schedule cs INNER JOIN classes c ON 
+            let sql = `SELECT cs.week_no, cs.sun, cs.mon, cs.tue, cs.wed, cs.thu, cs.fri, cs.sat, cs.class_code, cs.description, cs.class_link, cm.class_name, cm.owner_id, u.profile_pic, (SELECT google_token FROM users WHERE users.user_id=cm.owner_id) as owner_token FROM current_schedule cs INNER JOIN classes c ON 
             cs.class_code = c.class_code
             INNER JOIN users u ON c.user_id = u.user_id
             INNER JOIN classroom cm ON cs.class_code = cm.class_code
             WHERE u.google_token = '${google_token}' AND cs.week_no = '${next_week}'
             UNION
-            SELECT ms.schedule_id, ms.sun, ms.mon, ms.tue, ms.wed, ms.thu, ms.fri, ms.sat, ms.class_code, cm.description, cm.class_link, cm.class_name, cm.owner_id, u.profile_pic
+            SELECT ms.schedule_id, ms.sun, ms.mon, ms.tue, ms.wed, ms.thu, ms.fri, ms.sat, ms.class_code, cm.description, cm.class_link, cm.class_name, cm.owner_id, u.profile_pic, (SELECT google_token FROM users WHERE users.user_id=cm.owner_id) as owner_token
             FROM main_schedule ms INNER JOIN classes c ON 
             ms.class_code = c.class_code
             INNER JOIN users u ON c.user_id = u.user_id
