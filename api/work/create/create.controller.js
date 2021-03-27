@@ -5,7 +5,8 @@ const {uploadWork} = require('../work.services.v2');
 module.exports = {
     submit: async (req, res) =>{
         var data = req.body;
-        if(!(data.user_id || data.work_id || data.work || data.attachment || data.submitted_on)){
+        data.submitted_on = new Date();
+        if(!(data.user_id && data.work_id && data.work && data.attachment && data.submitted_on)){
             res.status(400).send("data missing");
         }else{
             checkUser(data.user_id,(err,info)=>{
