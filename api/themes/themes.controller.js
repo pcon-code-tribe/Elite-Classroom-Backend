@@ -1,5 +1,5 @@
 const {uploadWork,downloadWork} = require('../storage/storage.services');
-const { recordTheme,readTheme } = require('./themes.services');
+const { recordTheme,readTheme } = require('./theme.services.v2');
 const fs = require('fs');
 const {v4} = require('uuid');
 const path = require('path');
