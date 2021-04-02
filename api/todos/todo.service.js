@@ -40,7 +40,7 @@ module.exports = {
 	turnedInTodo: ({ google_token }) => {
 		return new Promise(async (resolve, reject) => {
 			let sql =
-				'SELECT work_submission.work, work_submission.attachment, work_submission.submitted_on FROM work_submission WHERE (work_submission.user_id = (SELECT user_id FROM users WHERE google_token = ?))';
+				'SELECT work_submission.work_id, work_submission.work, work_submission.attachment, work_submission.submitted_on, class_works.title, class_works.description,class_works.due_date, class_works.attachment, class_works.class_code, class_works.created_date, classroom.class_name, users.google_token as owner_token FROM work_submission JOIN class_works ON (class_works.work_id = work_submission.work_id) JOIN classroom on (class_works.class_code = classroom.class_code) JOIN users ON (classroom.owner_id = users.user_id) WHERE (work_submission.user_id = (SELECT user_id FROM users WHERE google_token = ?))';
 
 			await pool.query(sql, [google_token], (error, result, field) => {
 				if (error) {

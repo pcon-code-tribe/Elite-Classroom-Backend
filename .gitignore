@@ -9,4 +9,5 @@ messages.json
 serviceAccount.json
 serviceAccountKey.json
 serviceAccountKey2.json
+package-lock.json
 api/themes/theme.json
