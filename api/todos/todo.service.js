@@ -22,7 +22,7 @@ module.exports = {
 	missingTodo: ({ google_token }) => {
 		return new Promise(async (resolve, reject) => {
 			let sql =
-				'SELECT class_works.*, (SELECT name FROM users WHERE classroom.owner_id = users.user_id) as owner_name, classroom.class_name FROM class_works JOIN classroom ON (classroom.class_code = class_works.class_code) JOIN classes ON (classes.class_code = class_works.class_code) JOIN users ON (users.user_id = classes.user_id) AND users.google_token = ? AND class_works.type = 0';
+				'SELECT class_works.*, (SELECT name FROM users WHERE classroom.owner_id = users.user_id) as owner_name, classroom.class_name FROM class_works JOIN classroom ON (classroom.class_code = class_works.class_code) JOIN classes ON (classes.class_code = class_works.class_code) JOIN users ON (users.user_id = classes.user_id) AND users.google_token = ? AND class_works.type = 0 AND class_works.due_date < current_timestamp()';
 
 			await pool.query(sql, [google_token], (error, result, field) => {
 				if (error) {
