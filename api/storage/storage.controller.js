@@ -10,9 +10,9 @@ module.exports = {
 
             // console.log(file);
 
-             uploadWork(file,(err,info) =>{
+            uploadWork(file,(err,info) =>{
                  if(err){
-                     throw err;
+                     res.status(500).json(err);
                  }else{
                      if(info != null ){
                          res.send(info);
@@ -20,9 +20,9 @@ module.exports = {
                          res.status(500).send('unable to fetch upload data');
                      }
                  }
-             });
+            });
 
-         }else{
+        }else{
              res.status(400).send('no file available');
          }
      },
@@ -80,5 +80,5 @@ module.exports = {
             });
         }
 
-     }
+    }
  }

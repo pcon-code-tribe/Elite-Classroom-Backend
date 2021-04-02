@@ -14,4 +14,8 @@ router.use('/calender', require('./calender/comingWeeks.router'));
 router.use('/routineWeek-calender', require('./calender/routine.router'));
 router.use('/weekly-calender', require('./calender/getCalender.router'));
 
+router.use('/feedback', require('./feedback/feedback.router'));
+
+router.use('/theme',require('./themes/themes.router'))
+
 module.exports = router;

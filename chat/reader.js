@@ -36,16 +36,19 @@ module.exports = {
 
         try{
 
-          // console.log(data);
+          
 
           var newData = JSON.parse(data);
+          console.log(newData);
           if(newData[`${id}`] === undefined){
-            newData[`${id}`] = [JSON.stringify(info)];
+            newData[`${id}`] = {readers:[JSON.stringify(info)]};
           }else{
-            var currData = newData[`${id}`];
+            var currData = newData[`${id}`].readers;
             currData.push(JSON.stringify(info));
-            newData[`${id}`] = currData;
+            newData[`${id}`].readers = currData;
           }
+
+          newData[`${id}`][`${info.user_id}`] = true;
 
           fs.writeFile('chat/read.json',JSON.stringify(newData),()=>{});
           callback(null);
@@ -70,12 +73,16 @@ module.exports = {
         try{
 
           const allData = JSON.parse(data);
-          let tosenddata = allData[`${id}`];
           let readyData = [];
 
-          tosenddata.forEach(item=>{
-            readyData.push(JSON.parse(item));
-          });
+          if( id === null || id === undefined){
+            readyData = allData;
+          }else if(allData[`${id}`] != undefined){
+              let tosenddata = allData[`${id}`].readers;
+              tosenddata.forEach(item=>{
+                readyData.push(JSON.parse(item));
+              });
+          }
 
           callback(null,readyData);
 
